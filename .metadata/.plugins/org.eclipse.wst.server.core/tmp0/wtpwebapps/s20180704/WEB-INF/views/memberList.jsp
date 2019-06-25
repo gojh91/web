@@ -21,6 +21,7 @@
 		success : function(data) { 
 			/*  alert('data->'+data) */
 			$('header').html(data);
+			
 		}
 	});
  
