@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Review">
+   <!-- Use type aliases to avoid typing the full classname every time. -->
+   <resultMap id="ReviewResult" type="Board">
+      <result property="bd_num" column="bd_num" />
+      <result property="mb_id"  column="mb_id" />
+      <result property="bd_title" column="bd_title" />
+      <result property="bd_content" column="bd_content" />
+      <result property="bd_visitCnt" column="bd_visitCnt" />
+      <result property="bd_likeCnt" column="bd_likeCnt" />
+      <result property="bd_hashTag" column="bd_hashTag" />
+      <result property="bd_location" column="bd_location" />
+      <result property="bd_imgSrc" column="bd_imgSrc" />
+      <result property="bd_regDate" column="bd_regDate" />
+      <result property="bd_category" column="bd_category" />
+      <result property="res_num" column="res_num" />
+      <result property="bd_score" column="bd_score" />
+      <result property="bd_indent" column="bd_indent" />
+      <result property="bd_step" column="bd_step" />
+   </resultMap>
+   
+   
+   <insert id="JYinsertReview" parameterType="Board">
+      insert into board
+      (bd_num, mb_id, bd_title, bd_content, bd_hashTag, 
+      	bd_location, bd_imgSrc, bd_category, res_num, bd_score) 
+      values ((select max(bd_num)+1 from board where bd_category = 1),
+        #{mb_id}, #{bd_title}, #{bd_content}, #{bd_hashTag}, #{bd_location},
+        #{bd_imgSrc}, 1, #{res_num}, #{bd_score})
+   </insert>
+   
+  
+   
+   
+<!--    <select id="JYlistAll" parameterType="Board" resultMap="BoardResult">
+ 		select * from board where bd_category = '01'
+   </select> -->
+   
+  <!-- <select id = "JYreviewList"  resultType="Board">
+   		select * from board where bd_category = '1' and bd_status = '1'
+   		order by bd_num DESC
+   </select> -->
+   
+    <select id = "JYreviewList"  parameterType="MemberBoard" resultType="MemberBoard">
+      select e.bd_num, e.bd_title, e.bd_content, e.bd_visitCnt, e.bd_likeCnt, e.bd_hashTag, e.bd_location,
+      		 e.bd_regDate, e.bd_category, e.res_num, e.bd_score, e.bd_status, e.bd_imgSrc,
+      		 d.mb_imgSrc, d.mb_nickName, d.mb_birthDate, d.mb_id 
+      from board e , member d
+      where bd_category = '1' and bd_status = '1' and e.mb_id = d.mb_id
+      order by bd_num DESC
+   </select>		
+
+   <select id = "JYreviewDetail" parameterType="int" resultType="Board">
+   		select * from board where bd_num = #{bd_num} and bd_category = '1' 
+   </select>
+  
+   
+    <select id = "JYdelete" parameterType="int" resultType="Board">
+   		update board set bd_status = '2' where bd_num = #{bd_num} and bd_category ='1'
+   </select>
+   
+  <select id = "JYmemberDetail" parameterType="java.lang.String" resultType="MemberBoard">
+   		select *
+   		from member 
+   		where mb_id = #{mb_id}
+   </select>
+   
+   <select id = "JYreplyList" parameterType="int" resultType="Reply">
+   		select * from reply where bd_num = #{bd_num} and bd_category = '1' and re_status = '1'
+   		order by re_seqNum DESC
+   </select>
+   
+   <insert id="JYreplyWrite" parameterType="Reply">
+      insert into reply (bd_category, bd_num, re_seqnum, mb_id, re_content) 
+      values (1, #{bd_num}, (select NVL(max(re_seqnum),0)+1 from reply where bd_category = 1 and bd_num = #{bd_num}),
+        #{mb_id}, #{re_content})
+   </insert>
+   
+   <select id="JYReplyUpdate" parameterType="Reply" resultType="Reply">
+      update reply
+      set re_content = #{re_content}
+      where bd_num = #{bd_num} and bd_category = '1' and re_seqNum = #{re_seqNum}
+   </select>
+   
+   <select id="JYReplyDelete" parameterType="Reply" resultType="Reply">
+      update reply
+      set re_status = '2'
+      where bd_num = #{bd_num} and bd_category = '1' and re_seqNum = #{re_seqNum}
+   </select>
+   
+   <select id="JYupdateForm" parameterType="int" resultType="Board">
+      select * from board where bd_num = #{bd_num} and bd_category = '1' and bd_status = '1'
+   </select>
+   
+   <select id="JYupdate" parameterType="Board" resultType="Board">
+      update board
+      set bd_title = #{bd_title}, bd_content = #{bd_content},
+      bd_imgSrc = #{bd_imgSrc}, bd_hashTag = #{bd_hashTag},
+      bd_location = #{bd_location}, bd_score = #{bd_score}
+      where bd_num = #{bd_num} and bd_category = '1'
+   </select>
+   
+   <select id="JYReplyCnt" parameterType="int" resultType="int">
+   	  select count(*) from reply where bd_num = #{bd_num} and bd_category = '1' and re_status = '1'
+   </select>
+ 
+   <select id="JYdeleteWithReply" parameterType="int">
+      update reply
+      set re_status = '2'
+      where bd_num = #{bd_num} and bd_category = '1'
+   </select>
+   
+   <update id="JYaddLikeCnt" parameterType="int">
+   	  update board
+   	  set bd_likecnt = bd_likecnt + 1
+   	  where bd_num = #{bd_num} and bd_category = '1'
+   </update>
+   
+   <select id="JYgetResName" parameterType="int" resultType="java.lang.String">
+   	  select res_name
+   	  from res_info
+   	  where res_num = #{res_num}
+   </select>
+   
+    <select id = "JYreviewList2" parameterType="int" resultType="MemberBoard">
+   		select e.bd_num, e.bd_title, e.bd_content, e.bd_visitCnt, e.bd_likeCnt, e.bd_hashTag, e.bd_location, e.bd_regDate, e.bd_category, 
+   		       e.res_num, e.bd_score, e.bd_status, e.bd_imgSrc, d.mb_imgSrc, d.mb_nickName, d.mb_birthDate, d.mb_id 
+        from board e , member d
+        where bd_category = '1' and bd_status = '1' and e.mb_id = d.mb_id and res_num = #{res_num}
+        order by bd_num DESC
+   </select>
+   
+   <select id="JYavgScore" resultType="Board">
+   		select res_num, AVG(bd_score) avg_score
+   		from board
+   		group by res_num
+   
+   </select>
+   <select id="JYsetAvgScore" parameterType="Board">
+   		update res_info
+   		set res_score=#{avg_score}
+   		where res_num=#{res_num}
+   </select>
+   <select id="JYgetReplyImgSrc" parameterType="java.lang.String" resultType="java.lang.String">
+   		select mb_ImgSrc
+   		from member
+   		where mb_id = #{mb_id}
+   </select>
+   
+   <update id="JYsetVisitCnt" parameterType="int">
+        update board
+        set bd_visitCnt = bd_visitCnt + 1
+        where bd_num = #{bd_num} and bd_category = '1'
+    </update>
+   
+</mapper>

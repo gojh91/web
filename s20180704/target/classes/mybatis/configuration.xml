@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<typeAliases>
+		<typeAlias alias="Board"        type="oracle.java.meal_ting.model.Board" />
+		<typeAlias alias="MemberBoard"  type="oracle.java.meal_ting.model.MemberBoard" />
+		<typeAlias alias="Member"       type="oracle.java.meal_ting.model.Member" />
+		<typeAlias alias="Reply"        type="oracle.java.meal_ting.model.Reply" />
+		<typeAlias alias="ResInfo"      type="oracle.java.meal_ting.model.ResInfo" />
+		<typeAlias alias="ResInfoBoard" type="oracle.java.meal_ting.model.ResInfoBoard"/>
+		<typeAlias alias="Menu"         type="oracle.java.meal_ting.model.Menu"/>
+		<typeAlias alias="MemberReply"  type="oracle.java.meal_ting.model.MemberReply"/>
+	</typeAliases>
+	<mappers>
+		<mapper resource="mybatis/ResInfo.xml"/>
+		<mapper resource="mybatis/SdBoard.xml"/>
+		<mapper resource="mybatis/Review.xml" />
+		<mapper resource="mybatis/Search.xml" />
+		<mapper resource="mybatis/Member.xml" />
+	</mappers>
+</configuration>

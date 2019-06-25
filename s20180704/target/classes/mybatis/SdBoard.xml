@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SdBoard">
+	
+	<insert id="SdSaveOne" parameterType="Board">
+		insert into board(bd_num, mb_id, bd_title, bd_content,
+		bd_hashTag, bd_location, bd_category) 
+		values ((select NVL(max(bd_num),0)+1 from board where bd_category = '2'), #{mb_id}, #{bd_title}, #{bd_content},
+		#{bd_hashTag}, #{bd_location}, '2')
+	</insert>
+	
+	<select id="SdListAll" parameterType="MemberBoard" resultType="MemberBoard">
+		select e.bd_num, e.bd_title, e.bd_content, e.bd_hashTag, e.bd_location, d.mb_imgSrc,
+		e.bd_regDate, e.bd_category, e.bd_status, d.mb_nickName, d.mb_sex, d.mb_birthDate
+		from board e , member d
+		where bd_category = '2' and bd_status = '1' and e.mb_id = d.mb_id
+		order by bd_num DESC
+	</select>
+	
+	<select id="SdDetail" parameterType="int" resultType="Board">
+		select * from board where bd_num = #{bd_num} and bd_category = '2' and bd_status = '1'
+	</select>
+	
+	<select id="sdDelete" parameterType="int" resultType="Board">
+		update board
+		set bd_status = '2'
+		where bd_num = #{bd_num} and bd_category = '2' and bd_status = '1'
+	</select>
+	
+	<select id="sdMemberDetail" parameterType="int" resultType="MemberBoard">
+		select d.mb_sex, d.mb_birthDate, d.mb_nickName, d.mb_imgSrc
+		from board e , member d
+		where  e.mb_id = d.mb_id
+		and    bd_num = #{bd_num} and bd_category = '2' and bd_status = '1'
+	</select>
+	
+	<select id="sdUpdateForm" parameterType="int" resultType="Board">
+		select * from board where bd_num = #{bd_num} and bd_category = '2' and bd_status = '1'
+	</select>
+	
+	<select id="sdUpdate" parameterType="Board" resultType="Board">
+		update board
+		set bd_title = #{bd_title}, bd_content = #{bd_content},
+		bd_hashTag = #{bd_hashTag}, bd_location = #{bd_location}
+		where bd_num = #{bd_num} and bd_category = '2'
+	</select>
+
+  	<select id="sdReply" parameterType="MemberReply" resultType="MemberReply">
+		select r.bd_category, r.bd_num, r.re_seqNum, r.re_content, r.re_regDate, r.re_status, m.mb_nickName, r.mb_id, m.mb_sex, m.mb_birthDate, m.mb_imgSrc
+		from reply r , member m
+		where r.mb_id = m.mb_id and bd_num = #{bd_num} and bd_category = '2' and re_status = '1'
+		order by re_seqNum DESC
+	</select>
+	
+   	<insert id="sdReplySave" parameterType="Reply">
+		insert into reply(bd_category, bd_num, re_seqnum, mb_id, re_content, re_status) 
+		values ('2', #{bd_num}, (select NVL(max(re_seqnum),0)+1 from reply where bd_num = #{bd_num} and bd_category = '2'), #{mb_id}, #{re_content}, 1)
+	</insert>
+	
+	<select id="sdReplyDelete" parameterType="Reply" resultType="Reply">
+		update reply
+		set re_status = '2'
+		where bd_num = #{bd_num} and bd_category = '2' and re_seqNum = #{re_seqNum}
+	</select>
+	
+	<select id="sdReplyUpdate" parameterType="Reply" resultType="Reply">
+		update reply
+		set re_content = #{re_content}
+		where bd_num = #{bd_num} and bd_category = '2' and re_seqNum = #{re_seqNum}
+	</select>
+</mapper>
+
