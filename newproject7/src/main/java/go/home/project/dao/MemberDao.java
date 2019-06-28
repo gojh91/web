@@ -9,4 +9,5 @@ public interface MemberDao {
 	Member memberdetail(Member member);
 	int totalMember();
 	List<Member> listMember(Member member);
+	Member detail(String mb_id);
 }

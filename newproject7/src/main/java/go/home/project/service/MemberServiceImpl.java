@@ -30,4 +30,10 @@ public class MemberServiceImpl implements MemberService{
 		// TODO Auto-generated method stub
 		return md.listMember(member);
 	}
+
+	@Override
+	public Member detail(String mb_id) {
+		// TODO Auto-generated method stub
+		return md.detail(mb_id);
+	}
 }
