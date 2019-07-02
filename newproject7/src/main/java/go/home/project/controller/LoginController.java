@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import go.home.project.model.Member;
 import go.home.project.service.MemberPaging;
@@ -75,46 +76,74 @@ public class LoginController {
 		return "memberUpdateForm";
 	}
 
-	@RequestMapping(value = "memberUpdateForm3")
+	@RequestMapping(value = "memberUpdateForm2")
 	public String memberUpdateForm3(HttpServletRequest request, String mb_id, Model model) {
-		System.out.println("@RequestMapping(value = \"memberUpdateForm3\")");
-		String str = "";
-		String str2 = "";
-		String str3 = "";
-
-
-		Member member1 = ms.detail(mb_id); 
-
-		nickNameOriginal = member1.getMb_nickName(); 
-		System.out.println("memberUpdateForm3 nickNameOriginal->" + nickNameOriginal);
-
+		System.out.println("@RequestMapping(value = \"memberUpdateForm2\")");
+		String birthDate = "";
+		String regDate = "";
+		String wdDate = "";
 		
-		str = member1.getMb_birthDate();
-		if (str.length() > 9) {
-			member1.setMb_birthDate(str.substring(0, 10));
-		}
-		System.out.println("memberUpdateForm3 member1.getMb_birthDate()->" + member1.getMb_birthDate());
+		Member member = new Member();
+		
+		member.setMb_id(mb_id);
 
-		str2 = member1.getMb_regDate();
-		if (str2.length() > 9) {
-			member1.setMb_regDate(str2.substring(0, 10));
+		member = ms.memberdetail(member); 
+		
+		birthDate = member.getMb_birthDate();
+		if (birthDate.length() > 9) {
+			member.setMb_birthDate(birthDate.substring(0, 10));
 		}
-		System.out.println("memberUpdateForm3 member1.getMb_regDate()->" + member1.getMb_regDate());
-
-		str3 = member1.getMb_wdDate();
-		if (str3 == null) {
-			System.out.println("memberUpdateForm3 member1.getMb_wdDate()-> null ");
-			member1.setMb_wdDate("");
+		regDate = member.getMb_regDate();
+		if (regDate.length() > 9) {
+			member.setMb_regDate(regDate.substring(0, 10));
+		}
+		wdDate = member.getMb_wdDate();
+		if (wdDate == null) {
+			member.setMb_wdDate("");
 		} else {
-			if (str3.length() > 9) {
-				member1.setMb_wdDate(str3.substring(0, 10));
+			if (wdDate.length() > 9) {
+				member.setMb_wdDate(wdDate.substring(0, 10));
 			}
 		}
-		System.out.println("memberUpdateForm3 member1.getMb_wdDate()->" + member1.getMb_wdDate());
-
-		model.addAttribute("member", member1); 
-		model.addAttribute("mb_id", mb_id); 
-		return "memberUpdateForm3";
+		model.addAttribute("member", member); 
+		return "memberUpdateForm2";
 	}
+	
+//	@RequestMapping(value = "memberUpdate", method = RequestMethod.POST)
+//	public String memberUpdate(HttpServletRequest request, Member member, Model model) {
+//		int result = 0;
+//		String mNickName = "";
+//		
+//		System.out.println("_______________memberUpdate______________");
+//		
+//		mNickName = member.getMb_nickName(); // member�쓣 �넻�빐 �엯�젰諛쏆� nickName�쓣 �쟾�뿭蹂��닔 mNickName�뿉 ���옣
+//		
+//		System.out.println("memberUpdate getMb_authority->" + member.getMb_authority());
+//		System.out.println("memberUpdate mNickName->" + mNickName);
+//		System.out.println("memberUpdate nickNameOriginal->" + nickNameOriginal);
+//
+//		// 以묐났 �땳�꽕�엫 泥댄겕
+//		if (!mNickName.equals(nickNameOriginal)) {
+//			result = ms.memberNickNameCnt(mNickName); // DB�뿉�꽌 member NickName count 泥댄겕
+//			if (result > 0) {
+//				System.out.println("memberUpdate -> �궗�슜以묒씤 �땳�꽕�엫�엯�땲�떎. �떎瑜� �땳�꽕�엫瑜� �궗�슜�븯�꽭�슂");
+//				model.addAttribute("msg", "�궗�슜以묒씤 �땳�꽕�엫�엯�땲�떎. �떎瑜� �땳�꽕�엫瑜� �궗�슜�븯�꽭�슂");
+//				return "forward:memberUpdateForm.do";
+//			}
+//		}
+//
+//		int k = ms.update(member); // Update 泥섎━
+//		
+//		System.out.println("ms.update(member) CNT->" + k);
+//		
+//		HttpSession session = request.getSession();
+//		System.out.println("session after..");
+//		System.out.println("member.getMb_name() Before ->"+member.getMb_name());
+//	
+//		session.setAttribute("memberMe", member);
+//		System.out.println("member.getMb_name() After...->"+member.getMb_name());
+//		
+//		return "forward:Main.do";
+//	}
 
 }

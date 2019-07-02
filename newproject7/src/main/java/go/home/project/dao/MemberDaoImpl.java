@@ -34,9 +34,5 @@ public class MemberDaoImpl implements MemberDao{
 		return session.selectList("listMember", member);
 	}
 
-	@Override
-	public Member detail(String mb_id) {
-		// TODO Auto-generated method stub
-		return session.selectOne("HSmemberDetail", mb_id);;
-	}
+
 }
