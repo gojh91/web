@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<typeAliases>
+		<typeAlias alias="Board"        type="go.home.project.model.Board" />
+		<typeAlias alias="MemberBoard"  type="go.home.project.model.MemberBoard" />
+		<typeAlias alias="Member"       type="go.home.project.model.Member" />
+		<typeAlias alias="Reply"        type="go.home.project.model.Reply" />
+		<typeAlias alias="ResInfo"      type="go.home.project.model.ResInfo" />
+		<typeAlias alias="ResInfoBoard" type="go.home.project.model.ResInfoBoard"/>
+		<typeAlias alias="Menu"         type="go.home.project.model.Menu"/>
+		<typeAlias alias="MemberReply"  type="go.home.project.model.MemberReply"/>
+	</typeAliases>
+	<mappers>
+		<mapper resource="mybatis/ResInfo.xml"/>
+		<mapper resource="mybatis/Board.xml"/>
+		<mapper resource="mybatis/Review.xml" />
+		<mapper resource="mybatis/Search.xml" />
+		<mapper resource="mybatis/Member.xml" />
+	</mappers>
+</configuration>
