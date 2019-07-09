@@ -18,7 +18,7 @@ public class LoginRestController {
 	@RequestMapping("nickNameChk")
 	public int nicknamechk(Model model, HttpServletRequest request, String mb_nickName ) {
 		System.out.println("@RequestMapping(value = \"nickNameChk\")");
-		int nickcheck = ms.memberNickNameCnt(mb_nickName);
+		int nickcheck = ms.memberNickNameCnt(mb_nickName);//닉네임 중복 갯수
 		return nickcheck;
 	}
 

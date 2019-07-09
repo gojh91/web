@@ -17,6 +17,11 @@
 	</form>
 	<a>소셜네트워크</a>
 	<a>리뷰피드</a>
-	<a onclick="location.href='login.do'">로그인</a>
+	<c:if test="${checkLogin == 1}">
+		${loginMember.mb_nickName}
+	</c:if>
+	<c:if test="${checkLogin != 1}">
+		<a onclick="location.href='login.do'">로그인</a>
+	</c:if>
 </body>
 </html>
