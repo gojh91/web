@@ -8,7 +8,6 @@
 <%
 	String context = request.getContextPath();
 	Member member = (Member)request.getAttribute("member");
-	request.setCharacterEncoding("UTF-8");
 %>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <!-- jQuery와 Postcodify를 로딩한다. 주소찾기 api -->
@@ -17,7 +16,7 @@
 <script src="http://d1p7wdleee1q2z.cloudfront.net/post/search.min.js"></script>
 
 <script type="text/javascript">
-	function nicknamechk() { 
+	function nickNamechk() { 
 		var nickName = '<%= member.getMb_nickName()%>'
 		if(nickName != frm.mb_nickName.value){
 			$.ajax({	
@@ -62,7 +61,7 @@
 				<th></th>
 				<td></td>
 				<th></th>
-				<td><input type="button" value="중복확인" onclick="nicknamechk()"></td>
+				<td><input type="button" value="중복확인" onclick="nickNamechk()"></td>
 			</tr>
 
 			<tr align="center">

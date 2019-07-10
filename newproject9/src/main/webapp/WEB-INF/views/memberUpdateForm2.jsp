@@ -1,17 +1,40 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@page import="go.home.project.model.Member"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <!-- jQuery와 Postcodify를 로딩한다. 주소찾기 api -->
-<script
-	src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script	src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 <script src="http://d1p7wdleee1q2z.cloudfront.net/post/search.min.js"></script>
-
+<%
+	String context = request.getContextPath();
+	Member member = (Member) request.getAttribute("member");
+%>
 <script type="text/javascript">
+	function nickNamechk() { 
+	var nickName = '<%=member.getMb_nickName()%>'
+		if(nickName != frm.mb_nickName.value){
+			$.ajax({	
+				url : "<%=context%>/LoginRest/nickNameChk.do",
+				data : {
+					mb_nickName : frm.mb_nickName.value
+				},
+				success : function(data) {
+					if (data != 0) {
+						alert("Nickname is duplicate");
+					} else {
+						alert("Nickname is available");
+					}
+				}
+			});
+		} else {
+			alert("Nickname is available");
+		}
+	}
 	$(function() {
 		//주소 검색 api
 		$("#postcodify_search_button").postcodifyPopUp();

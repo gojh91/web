@@ -11,4 +11,5 @@ public interface MemberDao {
 	List<Member> listMember(Member member);
 	int memberNickNameCnt(String mb_nickName);
 	void update(Member member);
+	int memberIdCnt(String mb_id);
 }

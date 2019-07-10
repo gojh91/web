@@ -22,6 +22,7 @@
 	</c:if>
 	<c:if test="${checkLogin != 1}">
 		<a onclick="location.href='login.do'">로그인</a>
+		<a onclick="location.href='memberWriteForm.do'">회원가입</a>
 	</c:if>
 </body>
 </html>

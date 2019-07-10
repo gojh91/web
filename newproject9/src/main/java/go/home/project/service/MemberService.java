@@ -10,6 +10,7 @@ public interface MemberService {
 	int totalMember();
 	List<Member> listMember(Member member);
 	int memberNickNameCnt(String mb_nickName);
+	int memberIdCnt(String mb_id);
 	void update(Member member); 
 
 }

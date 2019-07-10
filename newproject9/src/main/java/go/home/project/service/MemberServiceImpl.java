@@ -41,4 +41,10 @@ public class MemberServiceImpl implements MemberService{
 		md.update(member);
 	}
 
+	@Override
+	public int memberIdCnt(String mb_id) {
+		// TODO Auto-generated method stub
+		return md.memberIdCnt(mb_id);
+	}
+
 }

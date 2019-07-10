@@ -15,7 +15,7 @@
 		<button type="submit">로그인</button>
 		<button onclick="location.href='memberIdFind.do'">아이디 찾기</button>
 		<button onclick="location.href='memberPwFind.do'">비밀번호 찾기</button>
-		<button onclick="location.href='memberWriteForm.do'">회원가입</button>
+		
 	</form>
 </body>
 </html>

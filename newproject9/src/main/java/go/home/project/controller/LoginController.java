@@ -35,7 +35,6 @@ public class LoginController {
 		String result = "login";
 
 		if (checklogin == 1) {
-			
 			member = ms.memberdetail(member);//로그인 한 사용자 다 가져오기
 			HttpSession session = request.getSession();
 			session.setAttribute("loginMember", member);//로그인 한 사용자 세션 넣기
@@ -139,13 +138,27 @@ public class LoginController {
 		return "forward:main.do";
 	}
 	
-	@RequestMapping(value = "memberLogout")
+	@RequestMapping(value = "memberLogout")//로그아웃 클릭 했을 때
 	public String memberUpdate(HttpServletRequest request, Model model) {
 		System.out.println("@RequestMapping(value = \"memberLogout\")");
 
 		request.getSession().invalidate();//세션 초기화
 		
-		return "main.do";
+		return "redirect:main.do";
+	}
+	
+	@RequestMapping(value = "memberWriteForm")//회원가입 폼으로 보내 줌
+	public String memberWriteForm() {
+		System.out.println("@RequestMapping(value = \"memberWriteForm\")");
+		return "memberWriteForm";
+	}
+	
+	@RequestMapping(value = "memberWrite")//회원가입 저장버튼
+	public String memberWrite() {
+		System.out.println("@RequestMapping(value = \"memberWrite\")");
+		
+		
+		return "redirect:main.do";
 	}
 	
 }

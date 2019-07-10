@@ -9003,3 +9003,1115 @@ java.lang.NullPointerException
 	at org.springsource.ide.eclipse.dashboard.internal.ui.editors.AggregateFeedJob.updateNotifications(AggregateFeedJob.java:231)
 	at org.springsource.ide.eclipse.dashboard.internal.ui.editors.AggregateFeedJob.run(AggregateFeedJob.java:179)
 	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SESSION 2019-07-10 11:50:07.517 -----------------------------------------------
+eclipse.buildId=3.9.7.201812201326-RELEASE-e410
+java.version=9.0.4
+java.vendor=Oracle Corporation
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=ko_KR
+Framework arguments:  -product org.springsource.sts.ide
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.springsource.sts.ide
+
+!ENTRY org.eclipse.jface 2 0 2019-07-10 11:52:33.657
+!MESSAGE Keybinding conflicts occurred.  They may interfere with normal accelerator operation.
+!SUBENTRY 1 org.eclipse.jface 2 0 2019-07-10 11:52:33.657
+!MESSAGE A conflict occurred for CTRL+SHIFT+T:
+Binding(CTRL+SHIFT+T,
+	ParameterizedCommand(Command(org.eclipse.jdt.ui.navigate.open.type,Open Type,
+		Open a type in a Java editor,
+		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@63e54c66,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+Binding(CTRL+SHIFT+T,
+	ParameterizedCommand(Command(org.eclipse.lsp4e.symbolinworkspace,Go to Symbol in Workspace,
+		,
+		Category(org.eclipse.lsp4e.category,Language Servers,null,true),
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@5246453e,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+
+!ENTRY org.eclipse.jface.text 2 0 2019-07-10 11:52:41.034
+!MESSAGE Duplicate template id: 'org.eclipse.wst.xslt.templates.xpath.boolean'
+
+!ENTRY org.eclipse.egit.ui 2 0 2019-07-10 11:52:56.686
+!MESSAGE Warning: The environment variable HOME is not set. The following directory will be used to store the Git
+user global configuration and to define the default location to store repositories: 'C:\Users\student'. If this is
+not correct please set the HOME environment variable and restart Eclipse. Otherwise Git for Windows and
+EGit might behave differently since they see different configuration options.
+This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
+
+!ENTRY org.eclipse.jdt.core 4 4 2019-07-10 11:53:00.149
+!MESSAGE Exception occurred during problem detection:
+----------------------------------- SOURCE BEGIN -------------------------------------
+package oracle.java.meal_ting.controller;
+
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import oracle.java.meal_ting.model.Member;
+import oracle.java.meal_ting.service.MemberPaging;
+import oracle.java.meal_ting.service.MemberService;
+
+@Controller
+public class HSmemberController {
+
+	@Autowired
+	private MemberService ms;
+	String nickNameOriginal = "";
+	String pwOriginal = "";
+	@Autowired
+	private HSCheckMember hsc;
+
+
+	@RequestMapping(value = "HSLogin")
+	public String HSLogin() {
+		System.out.println("________________HSLogin ________________");
+		return "login";
+	}
+
+	@RequestMapping(value = "HSCheckLogin")
+	public String HSCheckLogin(HttpServletRequest request, Member member, Model model) {
+		System.out.println(member.getMb_id());
+		System.out.println(member.getMb_pw());
+		String result = hsc.checkLoginWithFailType(member, model);
+		HttpSession session = request.getSession();
+		if(result.equals("success")) {
+			
+			Member loginMember = ms.detail(member.getMb_id());
+			session.setAttribute("memberMe", loginMember); // �꽭�뀡�뿉 濡쒓렇�씤 �젙蹂� ���옣
+			session.setAttribute("login", true); // �꽭�뀡�뿉 濡쒓렇�씤 ���옣
+			model.addAttribute("member", loginMember);
+			model.addAttribute("login", true);
+			model.addAttribute("loginTF", true);
+			result = "redirect:Main.do";
+		}else {
+			
+			session.setAttribute("login", false); // �꽭�뀡�뿉 濡쒓렇�씤 ���옣
+			model.addAttribute("login", false);
+			model.addAttribute("loginTF", false);
+		}
+		return result;
+	}
+
+	// 濡쒓렇�븘�썐
+	@RequestMapping(value = "memberLogout")
+	public String empLogout(HttpServletRequest request, Model model) {
+		// 濡쒓렇�븘�썐 �늻瑜� 寃쎌슦 濡쒓렇�씤 �솕硫댁쑝濡� �씠�룞
+		HttpSession session = request.getSession();
+
+		session.removeAttribute("memberMe");
+
+		session.setAttribute("login", false);
+
+		model.addAttribute("login", false);
+		model.addAttribute("loginTF", false);
+
+		return "redirect:HSLogin.do";
+	}
+
+	// �븘�씠�뵒 李얘린
+	@RequestMapping(value = "memberIdFind")
+	public String memberIdFind(Model model) {
+		System.out.println("______________memberIdFind______________");
+		return "memberIdFind";
+	}
+
+	@RequestMapping(value = "memberIdCheck")
+	public String memberIdCheck(String mb_nickName, String mb_name, String mb_email, Model model) {
+		System.out.println("______________memberIdCheck_____________");
+		System.out.println("memberIdCheck input�븳  �옄猷�->" + mb_nickName + "/" + mb_name + "/" + mb_email);
+		Member member = new Member();
+		member.setMb_nickName(mb_nickName);
+		member.setMb_name(mb_name);
+		member.setMb_email(mb_email);
+		String id = ms.getMemberIdCheck(member);
+		model.addAttribute("id", id);
+		return "memberIdResult";
+	}
+
+	// 鍮꾨�踰덊샇 李얘린
+	@RequestMapping(value = "memberPwFind")
+	public String memberPwFind(Model model) {
+		System.out.println("______________memberPwFind______________");
+		return "memberPwFind";
+	}
+
+	@RequestMapping(value = "memberPwCheck")
+	public String memberPwCheck(String mb_id, String mb_nickName, String mb_name, String mb_email, Model model) {
+		System.out.println("______________memberPwCheck_____________");
+		System.out.println("memberPwCheck input�븳  �옄猷�->" + mb_id + "/" + mb_nickName + "/" + mb_name + "/" + mb_email);
+		Member member = new Member();
+		member.setMb_id(mb_id);
+		member.setMb_nickName(mb_nickName);
+		member.setMb_name(mb_name);
+		member.setMb_email(mb_email);
+		String pw = ms.getMemberPwCheck(member);
+		model.addAttribute("pw", pw);
+		return "memberPwResult";
+	}
+
+	// �쉶�썝媛��엯 �벑濡� Form
+	@RequestMapping(value = "memberWriteForm")
+	public String memberWriteForm(Model model) {
+		System.out.println("_____________memberWriteForm____________");
+		return "memberWriteForm";
+	}
+	// mb_birthDate�쓣 model�뿉�꽌 Date濡� �꽑�뼵�븯硫�, "HTTP Status 400 -
+	// The request sent by the client was syntactically incorrect" �씪�뒗 Error媛� �깮湲대떎.
+	// �빐寃곕갑踰�: Date���떊 String�쑝濡� �꽑�뼵�빐�빞 �븳�떎.
+	// �쉶�썝�젙蹂� �벑濡� ���옣
+
+	@RequestMapping(value = "memberWrite", method = RequestMethod.GET)
+	public String memberWrite(Member member, Model model) {
+		String mNickName = "";
+		String str = "";
+		int checkIdResult = 0;
+		int checkNickNameResult = 0;
+		int checkInsertResult = 0;
+
+		System.out.println("_______________memberWrite______________");
+		System.out.println("memberWrite member.getMb_id()->" + member.getMb_id());
+		System.out.println("memberWrite member.getMb_pw()->" + member.getMb_pw());
+
+		mNickName = member.getMb_nickName(); // member�쓣 �넻�빐 login�뿉�꽌 �엯�젰諛쏆� nickName�쓣 �쟾�뿭蹂��닔 mNickName�뿉 ���옣
+		System.out.println("memberWrite mNickName->" + mNickName);
+
+		// 以묐났 �븘�씠�뵒 泥댄겕
+		System.out.println("memberWrite ms.memberIdCnt 泥댄겕�쟾");
+		checkIdResult = ms.memberIdCnt(member.getMb_id()); // DB�뿉�꽌 member Id count 泥댄겕
+
+		if (checkIdResult > 0) {
+			System.out.println("memberWrite -> �궗�슜以묒씤 �븘�씠�뵒�엯�땲�떎. �떎瑜� �븘�씠�뵒瑜� �궗�슜�븯�꽭�슂");
+			model.addAttribute("msg", "�궗�슜以묒씤 �븘�씠�뵒�엯�땲�떎. �떎瑜� �븘�씠�뵒瑜� �궗�슜�븯�꽭�슂");
+			return "forward:memberWriteForm.do";
+		}
+
+		// 以묐났 �땳�꽕�엫 泥댄겕
+		System.out.println("memberWrite ms.memberNickNameCnt 泥댄겕�쟾");
+		checkNickNameResult = ms.memberNickNameCnt(mNickName); // DB�뿉�꽌 member NickName count 泥댄겕
+
+		if (checkNickNameResult > 0) {
+			System.out.println("memberWrite -> �궗�슜以묒씤 �땳�꽕�엫�엯�땲�떎. �떎瑜� �땳�꽕�엫瑜� �궗�슜�븯�꽭�슂");
+			model.addAttribute("msg", "�궗�슜以묒씤 �땳�꽕�엫�엯�땲�떎. �떎瑜� �땳�꽕�엫瑜� �궗�슜�븯�꽭�슂");
+			return "forward:memberWriteForm.do";
+		}
+
+		// �깮�뀈�썡�씪�쓣 媛��졇�삤吏� 紐삵빐�꽌, 2018-05-01 00:00:00 --> 2018-05-01濡� 吏쒕Ⅴ湲�(�떆遺꾩큹 �젣嫄�)
+		str = member.getMb_birthDate();
+		if (str.length() > 9) {
+			member.setMb_birthDate(str.substring(0, 10));
+		}
+		System.out.println("member.getMb_birthDate()->" + member.getMb_birthDate());
+
+		System.out.println("memberWrite insert Before");
+		checkInsertResult = ms.insert(member); // Insert 泥섎━
+		if (checkInsertResult > 0) {
+			System.out.println("memberWrite insert Success..");
+			model.addAttribute("member", member);
+			return "HSCheckLogin.do";
+		} else {
+			model.addAttribute("msg", "�엯�젰 �떎�뙣 �솗�씤�빐 蹂댁꽭�슂");
+			return "forward:memberWriteForm.do";
+		}
+	}
+
+	// �쉶�썝媛��엯�뿉�꽌 以묐났 �븘�씠�뵒 泥댄겕
+	@RequestMapping(value = "confirmId")
+	public String confirmId(String mb_id, String mb_nickName, Model model) {
+		int result = 0;
+		System.out.println("_________________confirmId________________");
+		System.out.println("confirmId mb_id->" + mb_id);
+		System.out.println("confirmId mb_nickName->" + mb_nickName);
+
+		model.addAttribute("mb_id", mb_id);
+		model.addAttribute("mb_nickName", mb_nickName);
+
+		// 以묐났 �븘�씠�뵒 泥댄겕
+		result = ms.memberIdCnt(mb_id); // DB�뿉�꽌 member Id count 泥댄겕
+		if (result > 0) {
+			System.out.println("confirmId -> �궗�슜以묒씤 �븘�씠�뵒�엯�땲�떎. �떎瑜� �븘�씠�뵒瑜� �궗�슜�븯�꽭�슂");
+			model.addAttribute("msg", "�궗�슜以묒씤 �븘�씠�뵒�엯�땲�떎. �떎瑜� �븘�씠�뵒瑜� �궗�슜�븯�꽭�슂");
+			return "forward:memberWriteForm.do";
+		}
+		model.addAttribute("msg", "�궗�슜 媛��뒫�븳 �븘�씠�뵒�엯�땲�떎");
+		return "forward:memberWriteForm.do";
+	}
+
+	// �쉶�썝媛��엯�뿉�꽌 以묐났 �땳�꽕�엫 泥댄겕
+	@RequestMapping(value = "confirmNickName")
+	public String confirmNickName(String mb_id, String mb_nickName, Model model) {
+		int result = 0;
+		System.out.println("_________________confirmNickName________________");
+		System.out.println("confirmNickName mb_id->" + mb_id);
+		System.out.println("confirmNickName mb_nickName->" + mb_nickName);
+		System.out.println("confirmNickName nickNameOriginal->" + nickNameOriginal);
+
+		model.addAttribute("mb_id", mb_id);
+		model.addAttribute("mb_nickName", mb_nickName);
+
+		// 以묐났 �땳�꽕�엫 泥댄겕
+		result = ms.memberNickNameCnt(mb_nickName); // DB�뿉�꽌 member NickName count 泥댄겕
+		if (result > 0) {
+			System.out.println("confirmNickName -> �궗�슜以묒씤 �땳�꽕�엫�엯�땲�떎. �떎瑜� �땳�꽕�엫瑜� �궗�슜�븯�꽭�슂");
+			model.addAttribute("msg", "�궗�슜以묒씤 �땳�꽕�엫�엯�땲�떎. �떎瑜� �땳�꽕�엫瑜� �궗�슜�븯�꽭�슂");
+			return "forward:memberWriteForm.do";
+		}
+		model.addAttribute("msg", "�궗�슜 媛��뒫�븳 �땳�꽕�엫�엯�땲�떎");
+		return "forward:memberWriteForm.do";
+	}
+
+	// 媛쒖씤�젙蹂대�寃쎌뿉�꽌 以묐났 �땳�꽕�엫 泥댄겕
+	@RequestMapping(value = "confirmNickName2")
+	public String confirmNickName2(String mb_id, String mb_nickName, Model model) {
+		int result = 0;
+		System.out.println("_________________confirmNickName2________________");
+		System.out.println("confirmNickName2 mb_id->" + mb_id);
+		System.out.println("confirmNickName2 mb_nickName->" + mb_nickName);
+		System.out.println("confirmNickName2 nickNameOriginal->" + nickNameOriginal);
+
+		model.addAttribute("mb_nickName", mb_nickName);
+
+		// 以묐났 �땳�꽕�엫 泥댄겕
+		if (!mb_nickName.equals(nickNameOriginal)) {
+			result = ms.memberNickNameCnt(mb_nickName); // DB�뿉�꽌 member NickName count 泥댄겕
+			if (result > 0) {
+				System.out.println("confirmNickName2 -> �궗�슜以묒씤 �땳�꽕�엫�엯�땲�떎. �떎瑜� �땳�꽕�엫瑜� �궗�슜�븯�꽭�슂");
+				model.addAttribute("msg", "�궗�슜以묒씤 �땳�꽕�엫�엯�땲�떎. �떎瑜� �땳�꽕�엫瑜� �궗�슜�븯�꽭�슂");
+				return "forward:memberUpdateForm.do";
+			}
+		}
+		model.addAttribute("msg", "�궗�슜 媛��뒫�븳 �땳�꽕�엫�엯�땲�떎");
+		return "forward:memberUpdateForm.do";
+	}
+
+	// �쉶�썝�젙蹂댁닔�젙�뿉�꽌 以묐났 �땳�꽕�엫 泥댄겕
+	@RequestMapping(value = "confirmNickName3")
+	public String confirmNickName3(String mb_id, String mb_nickName, Model model) {
+		int result = 0;
+		System.out.println("confirmNickName3 mb_id->" + mb_id);
+		System.out.println("confirmNickName3 mb_nickName->" + mb_nickName);
+		model.addAttribute("mb_nickName", mb_nickName);
+		// 以묐났 �땳�꽕�엫 泥댄겕
+		if (!mb_nickName.equals(nickNameOriginal)) {
+			result = ms.memberNickNameCnt(mb_nickName); // DB�뿉�꽌 member NickName count 泥댄겕
+			if (result > 0) {
+				System.out.println("confirmNickName2 -> �궗�슜以묒씤 �땳�꽕�엫�엯�땲�떎. �떎瑜� �땳�꽕�엫瑜� �궗�슜�븯�꽭�슂");
+				model.addAttribute("msg", "�궗�슜以묒씤 �땳�꽕�엫�엯�땲�떎. �떎瑜� �땳�꽕�엫瑜� �궗�슜�븯�꽭�슂");
+				return "forward:memberUpdateForm3.do";
+			}
+		}
+		model.addAttribute("msg", "�궗�슜 媛��뒫�븳 �땳�꽕�엫�엯�땲�떎");
+		return "forward:memberUpdateForm3.do";
+	}
+
+	// 媛쒖씤(�궡)�젙蹂� 蹂�寃� Form
+	@RequestMapping(value = "memberUpdateForm")
+	public String memberUpdateForm(HttpServletRequest request, Model model) {
+
+		System.out.println("_____________memberUpdateForm____________");
+		HttpSession session = request.getSession();
+		Member member1 = (Member) session.getAttribute("memberMe");
+
+		System.out.println("memberUpdateForm member1.getMb_id()->" + member1.getMb_id());
+		nickNameOriginal = member1.getMb_nickName(); // nickName�쓣 �쟾�뿭蹂��닔 nickNameOriginal�뿉 ���옣
+		System.out.println("memberUpdateForm nickNameOriginal->" + nickNameOriginal);
+		pwOriginal = member1.getMb_pw(); // PW瑜� �쟾�뿭蹂��닔 pwOriginal�뿉 ���옣
+		System.out.println("memberUpdateForm pwOriginal->" + pwOriginal);
+
+		// �깮�뀈�썡�씪�쓣 媛��졇�삤吏� 紐삵빐�꽌, 2018-05-01 00:00:00 --> 2018-05-01濡� 吏쒕Ⅴ湲�(�떆遺꾩큹 �젣嫄�)
+		String str = member1.getMb_birthDate();
+		if (str.length() > 9) {
+			member1.setMb_birthDate(str.substring(0, 10));
+		}
+		System.out.println("member1.getMb_birthDate()->" + member1.getMb_birthDate());
+
+		model.addAttribute("member", member1); // member�뿉 �떞�뒗�떎
+		model.addAttribute("nickNameOriginal", nickNameOriginal);
+		model.addAttribute("pwOriginal", pwOriginal);
+		
+		return "memberUpdateForm";
+	}
+
+	// 媛쒖씤(�궡)�젙蹂� 蹂�寃� ���옣
+	@RequestMapping(value = "memberUpdate", method = RequestMethod.POST)
+	public String memberUpdate(HttpServletRequest request, Member member, Model model) {
+		int result = 0;
+		String mNickName = "";
+		
+		System.out.println("_______________memberUpdate______________");
+		
+		mNickName = member.getMb_nickName(); // member�쓣 �넻�빐 �엯�젰諛쏆� nickName�쓣 �쟾�뿭蹂��닔 mNickName�뿉 ���옣
+		
+		System.out.println("memberUpdate getMb_authority->" + member.getMb_authority());
+		System.out.println("memberUpdate mNickName->" + mNickName);
+		System.out.println("memberUpdate nickNameOriginal->" + nickNameOriginal);
+
+		// 以묐났 �땳�꽕�엫 泥댄겕
+		if (!mNickName.equals(nickNameOriginal)) {
+			result = ms.memberNickNameCnt(mNickName); // DB�뿉�꽌 member NickName count 泥댄겕
+			if (result > 0) {
+				System.out.println("memberUpdate -> �궗�슜以묒씤 �땳�꽕�엫�엯�땲�떎. �떎瑜� �땳�꽕�엫瑜� �궗�슜�븯�꽭�슂");
+				model.addAttribute("msg", "�궗�슜以묒씤 �땳�꽕�엫�엯�땲�떎. �떎瑜� �땳�꽕�엫瑜� �궗�슜�븯�꽭�슂");
+				return "forward:memberUpdateForm.do";
+			}
+		}
+
+		int k = ms.update(member); // Update 泥섎━
+		
+		System.out.println("ms.update(member) CNT->" + k);
+		
+		HttpSession session = request.getSession();
+		System.out.println("session after..");
+		System.out.println("member.getMb_name() Before ->"+member.getMb_name());
+	
+		session.setAttribute("memberMe", member);
+		System.out.println("member.getMb_name() After...->"+member.getMb_name());
+		
+		return "forward:Main.do";
+	}
+
+	// �쉶�썝�깉�눜 Form
+	@RequestMapping(value = "memberWithdrawalForm")
+	public String memberWithdrawalForm(HttpServletRequest request, Model model) {
+		System.out.println("_____________memberWithdrawalForm____________");
+		
+		HttpSession session = request.getSession();
+		Member member1 = (Member) session.getAttribute("memberMe");
+		model.addAttribute("mb_id", member1.getMb_id());
+		
+		return "memberWithdrawalForm";
+	}
+
+	// �쉶�썝�깉�눜 ���옣
+	@RequestMapping(value = "memberWithdrawal", method = RequestMethod.POST)
+	public String memberWithdrawal(HttpServletRequest request, Member member, Model model) {
+
+		HttpSession session = request.getSession();
+		Member member1 = (Member) session.getAttribute("memberMe");
+		
+		System.out.println("_______________memberWithdrawal______________");
+		System.out.println("memberWithdrawal nickNameOriginal->" + nickNameOriginal);
+
+		int k = ms.update2(member1); // Update2(Inactive) 泥섎━
+		System.out.println("ms.update2(member1) CNT->" + k);
+
+		model.addAttribute("memberMe", member1);
+
+		/*return "Main.do";*/
+		return "forward:Main.do";
+		/*redirect:list.do*/
+	}
+
+	// �쉶�썝紐⑸줉(愿�由ъ옄)
+	@RequestMapping(value = "memberList")
+	public String memberList(HttpServletRequest request, Member member, String currentPage, Model model) {
+		int total = ms.totalMember(); // 珥� �쉶�썝�닔 議고쉶
+
+		System.out.println("________________memberList_______________");
+		System.out.println("memberList total->" + total);
+		System.out.println("memberList currentPage->" + currentPage);
+		// 14 NULL(0,1....)
+
+		MemberPaging pg = new MemberPaging(total, currentPage);
+		member.setStart(pg.getStart()); // �떆�옉�떆 1
+		member.setEnd(pg.getEnd()); // �떆�옉�떆 10
+		System.out.println("memberList pg.getStart->" + pg.getStart());
+		System.out.println("memberList pg.getEnd->" + pg.getEnd());
+
+		HttpSession session = request.getSession();
+		Member member1 = (Member) session.getAttribute("memberMe");
+		
+		model.addAttribute("mb_nickName", member1.getMb_nickName());
+
+		List<Member> list = ms.list(member); // �쉶�썝紐⑸줉(愿�由ъ옄) 議고쉶 泥섎━
+		model.addAttribute("list", list);
+		model.addAttribute("pg", pg);
+		return "memberList";
+	}
+
+	// 寃��깋 寃곌낵�뿉 �뵲瑜� 紐⑤뱺 �궡�슜 蹂댁뿬二쇨린
+	@RequestMapping(value = "memberListSearch", method = RequestMethod.GET)
+	public String memberListSearch(Member member, String currentPage, HttpServletRequest request, Model model) {
+		
+		HttpSession session = request.getSession();
+		Member member1 = (Member) session.getAttribute("memberMe");
+		
+		System.out.println("________________memberListSearch_______________");
+
+		String keyword = request.getParameter("keywordSearch"); // �궎�썙�뱶 媛��졇�삤湲�
+		member.setKeyword(keyword);
+		System.out.println("memberListSearch keyword ->" + keyword);
+
+		int total = ms.totalMemberKeyword(keyword); // Keyword濡� �쉶�썝�닔 議고쉶
+		System.out.println("memberListSearch 議고쉶�맂 �쉶�썝�닔 ->" + total);
+		System.out.println("memberListSearch currentPage->" + currentPage);
+		// 14 NULL(0,1....)
+		MemberPaging pg = new MemberPaging(total, currentPage);
+		member.setStart(pg.getStart()); // �떆�옉�떆 1
+		member.setEnd(pg.getEnd()); // �떆�옉�떆 10
+		System.out.println("memberListSearch pg.getStart->" + pg.getStart());
+		System.out.println("memberListSearch pg.getEnd->" + pg.getEnd());
+
+		model.addAttribute("mb_nickName", member1.getMb_nickName());
+
+		List<Member> list = ms.memberListSearch(member); // �쉶�썝紐⑸줉(愿�由ъ옄)�뿉�꽌 寃��깋�궗�슜�떆 議고쉶 泥섎━
+		total = list.size();
+
+		model.addAttribute("list", list);
+		model.addAttribute("pg", pg);
+		model.addAttribute("keywordSearch", keyword); // keywordSearch媛� �뾾�뼱�졇�꽌 �떎�떆 ���옣�빐以��떎.
+		return "memberList";
+	}
+
+	// �쉶�썝紐⑸줉 �긽�떒諛�(愿�由ъ옄)
+	@RequestMapping(value = "getHeader", produces = "application/text;charset=UTF-8")
+	public String getHeader(HttpServletRequest request, Model model) {
+		
+		HttpSession session = request.getSession();
+		Member member1 = (Member) session.getAttribute("memberMe");
+		
+		System.out.println("getHeader mb_nickName ->" + member1.getMb_nickName());
+		model.addAttribute("mb_nickName", member1.getMb_nickName());
+		
+		return "memberHeaderForm";
+	}
+
+	// �쉶�썝紐⑸줉 �궗�씠�뱶諛�(愿�由ъ옄)
+	@RequestMapping(value = "getSide")
+	public String getSide(HttpServletRequest request, Model model) {
+		// 醫뚯륫 硫붾돱 諛쏆븘�꽌 �삱由ш린
+		HttpSession session = request.getSession(true);
+		Member member = (Member) session.getAttribute("memberMe");
+		System.out.println("getSide mb_id ->" + member.getMb_id());
+		model.addAttribute("member", member);
+		return "memberSideForm";
+	}
+
+	// �쉶�썝紐⑸줉(愿�由ъ옄)�쓽 �쉶�썝�젙蹂�(Detail) 議고쉶
+	@RequestMapping(value = "memberDetail")
+	public String detail(String mb_id, Model model, HttpServletRequest request) {
+		System.out.println("_______________memberDetail______________");
+		Member member = ms.detail(mb_id);
+		model.addAttribute("member", member);
+		return "memberDetail";
+	}
+
+	// �쉶�썝�젙蹂� �닔�젙 Form(愿�由ъ옄)
+	@RequestMapping(value = "memberUpdateForm3")
+	public String memberUpdateForm3(HttpServletRequest request, String mb_id, Model model) {
+		Member member1;
+		String str = "";
+		String str2 = "";
+		String str3 = "";
+
+		System.out.println("_____________memberUpdateForm3____________");
+		System.out.println("memberUpdateForm3 mb_id->" + mb_id);
+
+		member1 = ms.detail(mb_id); // DB�옄猷� - Detail
+
+		nickNameOriginal = member1.getMb_nickName(); // nickName�쓣 �쟾�뿭蹂��닔 nickNameOriginal�뿉 ���옣
+		System.out.println("memberUpdateForm3 nickNameOriginal->" + nickNameOriginal);
+
+		// �궇吏쒓� String�삎�씤 �깮�뀈�썡�씪�쓣 媛��졇�삤吏� 紐삵빐�꽌,YYYY-MM-DD濡� 濡� 吏쒕Ⅴ湲�(�떆遺꾩큹 �젣嫄�) ex) 2018-05-01 00:00:00
+		// --> 2018-05-01
+		str = member1.getMb_birthDate();
+		if (str.length() > 9) {
+			member1.setMb_birthDate(str.substring(0, 10));
+		}
+		System.out.println("memberUpdateForm3 member1.getMb_birthDate()->" + member1.getMb_birthDate());
+
+		str2 = member1.getMb_regDate();
+		if (str2.length() > 9) {
+			member1.setMb_regDate(str2.substring(0, 10));
+		}
+		System.out.println("memberUpdateForm3 member1.getMb_regDate()->" + member1.getMb_regDate());
+
+		str3 = member1.getMb_wdDate();
+		if (str3 == null) {
+			System.out.println("memberUpdateForm3 member1.getMb_wdDate()-> null ");
+			member1.setMb_wdDate("");
+		} else {
+			if (str3.length() > 9) {
+				member1.setMb_wdDate(str3.substring(0, 10));
+			}
+		}
+		System.out.println("memberUpdateForm3 member1.getMb_wdDate()->" + member1.getMb_wdDate());
+
+		model.addAttribute("member", member1); // member�뿉 �떞�뒗�떎
+		model.addAttribute("mb_id", mb_id); // member�뿉 �떞�뒗�떎
+		return "memberUpdateForm3";
+	}
+
+	// �쉶�썝�젙蹂� �닔�젙 ���옣(愿�由ъ옄)
+	@RequestMapping(value = "memberUpdate3", method = RequestMethod.POST)
+	public String memberUpdate3(Member member, Model model) {
+		int result = 0;
+		String mNickName = "";
+
+		System.out.println("_______________memberUpdate3______________");
+		System.out.println("memberUpdate3 member.getMb_regDate()->" + member.getMb_regDate());
+
+		mNickName = member.getMb_nickName(); // member�쓣 �넻�빐 �엯�젰諛쏆� nickName
+		System.out.println("memberUpdate3 mNickName->" + mNickName);
+		System.out.println("memberUpdate3 nickNameOriginal->" + nickNameOriginal);
+
+		if (!mNickName.equals(nickNameOriginal)) {
+			System.out.println("以묐났 �땳�꽕�엫 泥댄겕->" + mNickName);
+			result = ms.memberNickNameCnt(mNickName); // DB�뿉�꽌 member NickName count 泥댄겕
+			if (result > 0) {
+				System.out.println("memberUpdate3 -> �궗�슜以묒씤 �땳�꽕�엫�엯�땲�떎. �떎瑜� �땳�꽕�엫瑜� �궗�슜�븯�꽭�슂");
+				model.addAttribute("msg", "�궗�슜以묒씤 �땳�꽕�엫�엯�땲�떎. �떎瑜� �땳�꽕�엫瑜� �궗�슜�븯�꽭�슂");
+				return "forward:memberUpdateForm3";
+			}
+		}
+
+		int k = ms.update3(member); // Update 泥섎━
+		System.out.println("ms.update3(member) CNT->" + k);
+
+		mNickName = member.getMb_nickName();
+		model.addAttribute("memberMe", member);
+		return "forward:memberList.do";
+	}
+
+	// �쉶�썝�젙蹂댁닔�젙�뿉�꽌 寃��깋
+	@RequestMapping(value = "memberSearch", method = RequestMethod.GET)
+	public String memberSearch(String keywordSearch, Model model, HttpServletRequest request) {
+		// keyword濡� �젙蹂� 李얘린
+		System.out.println("_______________memberSearch______________");
+		System.out.println("memberSearch keywordSearch->" + keywordSearch);
+		Member member = new Member();
+		member.setMb_nickName(keywordSearch);
+
+		member = ms.memberSearch(keywordSearch); // nickName�쑝濡� id�쓣 select
+
+		// 濡쒓렇�씤�븳 �쑀��
+		HttpSession session = request.getSession(true);
+		Member member1 = (Member) session.getAttribute("memberMe");
+		System.out.println("memberSearch memberMe 濡쒓렇�삩 �븘�씠�뵒->" + member1.getMb_id());
+		System.out.println("memberSearch memberMe 濡쒓렇�삩 �땳�꽕�엫->" + member1.getMb_nickName());
+		System.out.println("memberSearch memberMe 濡쒓렇�삩 �씠由�->" + member1.getMb_name());
+
+		if (member == null) {
+			// 寃��깋寃곌낵媛� �떎瑜� 寃쎌슦, 濡쒓렇�씤 �쑀��濡� �솕硫� 蹂듦�
+			model.addAttribute("member", member1);
+			model.addAttribute("err", "memberSearchErr");
+			return "memberErr";
+		} else {
+			// 寃��깋 寃곌낵 �씪移섑븳 寃쎌슦
+			String memberId = member.getMb_id();
+			System.out.println("�씪移�->" + memberId);
+			// model.addAttribute("memberMe", member1);
+			request.setAttribute("mb_id", memberId); // controller 硫붿꽌�뱶�겮由� �옄猷� �쟾�떖�뿉�꽌 �떞湲�
+			return "forward:memberUpdateForm4.do";
+		}
+	}
+
+	// �쉶�썝�젙蹂� �닔�젙 Form(愿�由ъ옄)
+	@RequestMapping(value = "memberUpdateForm4")
+	public String memberUpdateForm4(HttpServletRequest request, Model model) {
+		Member member1;
+		String str = "";
+		String str2 = "";
+		String str3 = "";
+		String mb_id = "";
+
+		mb_id = (String) request.getAttribute("mb_id"); // controller 硫붿꽌�뱶�겮由� �옄猷� �쟾�떖�뿉�꽌 �뼸湲�
+		System.out.println("_____________memberUpdateForm4____________");
+		System.out.println("memberUpdateForm4 mb_id->" + mb_id);
+
+		HttpSession session = request.getSession();
+		member1 = ms.detail(mb_id); // DB�옄猷� - Detail
+		session.setAttribute("memberMe", member1); // �꽭�뀡�뿉 濡쒓렇�씤 �젙蹂� ���옣
+		nickNameOriginal = member1.getMb_nickName(); // nickName�쓣 �쟾�뿭蹂��닔 nickNameOriginal�뿉 ���옣
+		System.out.println("memberUpdateForm4 nickNameOriginal->" + nickNameOriginal);
+
+		// �궇吏쒓� String�삎�씤 �깮�뀈�썡�씪�쓣 媛��졇�삤吏� 紐삵빐�꽌,YYYY-MM-DD濡� 濡� 吏쒕Ⅴ湲�(�떆遺꾩큹 �젣嫄�) ex) 2018-05-01 00:00:00
+		// --> 2018-05-01
+		str = member1.getMb_birthDate();
+		if (str.length() > 9) {
+			member1.setMb_birthDate(str.substring(0, 10));
+		}
+		System.out.println("memberUpdateForm4 member1.getMb_birthDate()->" + member1.getMb_birthDate());
+
+		str2 = member1.getMb_regDate();
+		if (str2.length() > 9) {
+			member1.setMb_regDate(str2.substring(0, 10));
+		}
+		System.out.println("memberUpdateForm4 member1.getMb_regDate()->" + member1.getMb_regDate());
+
+		str3 = member1.getMb_wdDate();
+		if (str3 == null) {
+			System.out.println("memberUpdateForm4 member1.getMb_wdDate()-> null ");
+			member1.setMb_wdDate("");
+		} else {
+			if (str3.length() > 9) {
+				member1.setMb_wdDate(str3.substring(0, 10));
+			}
+		}
+		System.out.println("memberUpdateForm4 member1.getMb_wdDate()->" + member1.getMb_wdDate());
+
+		model.addAttribute("member", member1); // member�뿉 �떞�뒗�떎
+		model.addAttribute("mb_id", mb_id); // member�뿉 �떞�뒗�떎
+		return "memberUpdateForm3";
+	}
+
+	// �쉶�썝�젙蹂� �궘�젣 Form(愿�由ъ옄)
+	@RequestMapping(value = "memberDeleteForm")
+	public String memberDeleteForm(HttpServletRequest request, String mb_id, Model model) {
+		Member member1;
+		System.out.println("_____________memberDeleteForm____________");
+		System.out.println("memberDeleteForm mb_id()->" + mb_id);
+		HttpSession session = request.getSession();
+		member1 = ms.detail(mb_id); // DB�옄猷� - Detail
+		session.setAttribute("memberMe", member1); // �꽭�뀡�뿉 濡쒓렇�씤 �젙蹂� ���옣
+		model.addAttribute("member", member1); // member�뿉 �떞�뒗�떎
+		model.addAttribute("mb_id", mb_id); // member�뿉 �떞�뒗�떎
+		return "memberDeleteForm";
+	}
+
+	// �쉶�썝�젙蹂� �궘�젣(愿�由ъ옄)
+	@RequestMapping(value = "memberDelete")
+	public String memberDelete(String mb_id, Model model) {
+		System.out.println("_______________memberDelete______________");
+		System.out.println("memberDelete mb_id()->" + mb_id);
+		int k = ms.delete(mb_id); // Delete 泥섎━
+		System.out.println("ms.delete(mb_id) CNT->" + k);
+		return "redirect:memberList.do";
+	}
+
+}
+
+----------------------------------- SOURCE END -------------------------------------
+!STACK 0
+java.lang.NullPointerException
+	at org.eclipse.jdt.internal.compiler.classfmt.ClassFileReader.getMemberTypes(ClassFileReader.java:740)
+	at org.eclipse.jdt.internal.compiler.lookup.BinaryTypeBinding.cachePartsFrom(BinaryTypeBinding.java:436)
+	at org.eclipse.jdt.internal.compiler.lookup.LookupEnvironment.createBinaryTypeFrom(LookupEnvironment.java:1040)
+	at org.eclipse.jdt.internal.compiler.lookup.LookupEnvironment.createBinaryTypeFrom(LookupEnvironment.java:1021)
+	at org.eclipse.jdt.internal.compiler.Compiler.accept(Compiler.java:308)
+	at org.eclipse.jdt.internal.compiler.lookup.LookupEnvironment.askForType(LookupEnvironment.java:319)
+	at org.eclipse.jdt.internal.compiler.lookup.PackageBinding.getType(PackageBinding.java:195)
+	at org.eclipse.jdt.internal.compiler.lookup.Scope.findType(Scope.java:2020)
+	at org.eclipse.jdt.internal.compiler.lookup.Scope.getTypeOrPackage(Scope.java:3348)
+	at org.eclipse.jdt.internal.compiler.lookup.Scope.getBinding(Scope.java:2286)
+	at org.eclipse.jdt.internal.compiler.lookup.BlockScope.getBinding(BlockScope.java:490)
+	at org.eclipse.jdt.internal.compiler.ast.QualifiedNameReference.resolveType(QualifiedNameReference.java:1020)
+	at org.eclipse.jdt.internal.compiler.ast.MessageSend.resolveType(MessageSend.java:678)
+	at org.eclipse.jdt.internal.compiler.ast.Expression.resolve(Expression.java:1034)
+	at org.eclipse.jdt.internal.compiler.ast.AbstractMethodDeclaration.resolveStatements(AbstractMethodDeclaration.java:641)
+	at org.eclipse.jdt.internal.compiler.ast.MethodDeclaration.resolveStatements(MethodDeclaration.java:316)
+	at org.eclipse.jdt.internal.compiler.ast.AbstractMethodDeclaration.resolve(AbstractMethodDeclaration.java:551)
+	at org.eclipse.jdt.internal.compiler.ast.TypeDeclaration.resolve(TypeDeclaration.java:1229)
+	at org.eclipse.jdt.internal.compiler.ast.TypeDeclaration.resolve(TypeDeclaration.java:1354)
+	at org.eclipse.jdt.internal.compiler.ast.CompilationUnitDeclaration.resolve(CompilationUnitDeclaration.java:652)
+	at org.eclipse.jdt.internal.compiler.Compiler.resolve(Compiler.java:1055)
+	at org.eclipse.jdt.internal.compiler.Compiler.resolve(Compiler.java:1100)
+	at org.eclipse.jdt.internal.core.CompilationUnitProblemFinder.process_aroundBody0(CompilationUnitProblemFinder.java:280)
+	at org.eclipse.jdt.internal.core.CompilationUnitProblemFinder$AjcClosure1.run(CompilationUnitProblemFinder.java:1)
+	at org.eclipse.contribution.jdt.itdawareness.ITDAwarenessAspect.ajc$around$org_eclipse_contribution_jdt_itdawareness_ITDAwarenessAspect$4$8b05d765proceed(ITDAwarenessAspect.aj:231)
+	at org.eclipse.contribution.jdt.itdawareness.ITDAwarenessAspect.ajc$around$org_eclipse_contribution_jdt_itdawareness_ITDAwarenessAspect$4$8b05d765(ITDAwarenessAspect.aj:244)
+	at org.eclipse.jdt.internal.core.CompilationUnitProblemFinder.process(CompilationUnitProblemFinder.java:247)
+	at org.eclipse.jdt.internal.core.CompilationUnitProblemFinder.process(CompilationUnitProblemFinder.java:346)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.makeConsistent(ReconcileWorkingCopyOperation.java:193)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.executeOperation(ReconcileWorkingCopyOperation.java:94)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.run(JavaModelOperation.java:736)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.runOperation(JavaModelOperation.java:802)
+	at org.eclipse.jdt.internal.core.CompilationUnit.reconcile(CompilationUnit.java:1322)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:131)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.access$0(JavaReconcilingStrategy.java:113)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy$1.run(JavaReconcilingStrategy.java:93)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:90)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.initialReconcile(JavaReconcilingStrategy.java:188)
+	at org.eclipse.jdt.internal.ui.text.CompositeReconcilingStrategy.initialReconcile(CompositeReconcilingStrategy.java:122)
+	at org.eclipse.jdt.internal.ui.text.JavaCompositeReconcilingStrategy.initialReconcile(JavaCompositeReconcilingStrategy.java:139)
+	at org.eclipse.jface.text.reconciler.MonoReconciler.initialProcess(MonoReconciler.java:98)
+	at org.eclipse.jdt.internal.ui.text.JavaReconciler.initialProcess(JavaReconciler.java:423)
+	at org.eclipse.jface.text.reconciler.AbstractReconciler$BackgroundThread.run(AbstractReconciler.java:177)
+
+!ENTRY org.eclipse.jdt.ui 4 2 2019-07-10 11:53:00.152
+!MESSAGE Problems occurred when invoking code from plug-in: "org.eclipse.jdt.ui".
+!STACK 1
+Java Model Exception: java.lang.NullPointerException
+	at org.eclipse.jdt.internal.core.CompilationUnitProblemFinder.process_aroundBody0(CompilationUnitProblemFinder.java:324)
+	at org.eclipse.jdt.internal.core.CompilationUnitProblemFinder$AjcClosure1.run(CompilationUnitProblemFinder.java:1)
+	at org.eclipse.contribution.jdt.itdawareness.ITDAwarenessAspect.ajc$around$org_eclipse_contribution_jdt_itdawareness_ITDAwarenessAspect$4$8b05d765proceed(ITDAwarenessAspect.aj:231)
+	at org.eclipse.contribution.jdt.itdawareness.ITDAwarenessAspect.ajc$around$org_eclipse_contribution_jdt_itdawareness_ITDAwarenessAspect$4$8b05d765(ITDAwarenessAspect.aj:244)
+	at org.eclipse.jdt.internal.core.CompilationUnitProblemFinder.process(CompilationUnitProblemFinder.java:247)
+	at org.eclipse.jdt.internal.core.CompilationUnitProblemFinder.process(CompilationUnitProblemFinder.java:346)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.makeConsistent(ReconcileWorkingCopyOperation.java:193)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.executeOperation(ReconcileWorkingCopyOperation.java:94)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.run(JavaModelOperation.java:736)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.runOperation(JavaModelOperation.java:802)
+	at org.eclipse.jdt.internal.core.CompilationUnit.reconcile(CompilationUnit.java:1322)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:131)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.access$0(JavaReconcilingStrategy.java:113)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy$1.run(JavaReconcilingStrategy.java:93)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:90)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.initialReconcile(JavaReconcilingStrategy.java:188)
+	at org.eclipse.jdt.internal.ui.text.CompositeReconcilingStrategy.initialReconcile(CompositeReconcilingStrategy.java:122)
+	at org.eclipse.jdt.internal.ui.text.JavaCompositeReconcilingStrategy.initialReconcile(JavaCompositeReconcilingStrategy.java:139)
+	at org.eclipse.jface.text.reconciler.MonoReconciler.initialProcess(MonoReconciler.java:98)
+	at org.eclipse.jdt.internal.ui.text.JavaReconciler.initialProcess(JavaReconciler.java:423)
+	at org.eclipse.jface.text.reconciler.AbstractReconciler$BackgroundThread.run(AbstractReconciler.java:177)
+Caused by: java.lang.NullPointerException
+	at org.eclipse.jdt.internal.compiler.classfmt.ClassFileReader.getMemberTypes(ClassFileReader.java:740)
+	at org.eclipse.jdt.internal.compiler.lookup.BinaryTypeBinding.cachePartsFrom(BinaryTypeBinding.java:436)
+	at org.eclipse.jdt.internal.compiler.lookup.LookupEnvironment.createBinaryTypeFrom(LookupEnvironment.java:1040)
+	at org.eclipse.jdt.internal.compiler.lookup.LookupEnvironment.createBinaryTypeFrom(LookupEnvironment.java:1021)
+	at org.eclipse.jdt.internal.compiler.Compiler.accept(Compiler.java:308)
+	at org.eclipse.jdt.internal.compiler.lookup.LookupEnvironment.askForType(LookupEnvironment.java:319)
+	at org.eclipse.jdt.internal.compiler.lookup.PackageBinding.getType(PackageBinding.java:195)
+	at org.eclipse.jdt.internal.compiler.lookup.Scope.findType(Scope.java:2020)
+	at org.eclipse.jdt.internal.compiler.lookup.Scope.getTypeOrPackage(Scope.java:3348)
+	at org.eclipse.jdt.internal.compiler.lookup.Scope.getBinding(Scope.java:2286)
+	at org.eclipse.jdt.internal.compiler.lookup.BlockScope.getBinding(BlockScope.java:490)
+	at org.eclipse.jdt.internal.compiler.ast.QualifiedNameReference.resolveType(QualifiedNameReference.java:1020)
+	at org.eclipse.jdt.internal.compiler.ast.MessageSend.resolveType(MessageSend.java:678)
+	at org.eclipse.jdt.internal.compiler.ast.Expression.resolve(Expression.java:1034)
+	at org.eclipse.jdt.internal.compiler.ast.AbstractMethodDeclaration.resolveStatements(AbstractMethodDeclaration.java:641)
+	at org.eclipse.jdt.internal.compiler.ast.MethodDeclaration.resolveStatements(MethodDeclaration.java:316)
+	at org.eclipse.jdt.internal.compiler.ast.AbstractMethodDeclaration.resolve(AbstractMethodDeclaration.java:551)
+	at org.eclipse.jdt.internal.compiler.ast.TypeDeclaration.resolve(TypeDeclaration.java:1229)
+	at org.eclipse.jdt.internal.compiler.ast.TypeDeclaration.resolve(TypeDeclaration.java:1354)
+	at org.eclipse.jdt.internal.compiler.ast.CompilationUnitDeclaration.resolve(CompilationUnitDeclaration.java:652)
+	at org.eclipse.jdt.internal.compiler.Compiler.resolve(Compiler.java:1055)
+	at org.eclipse.jdt.internal.compiler.Compiler.resolve(Compiler.java:1100)
+	at org.eclipse.jdt.internal.core.CompilationUnitProblemFinder.process_aroundBody0(CompilationUnitProblemFinder.java:280)
+	... 21 more
+Caused by: java.lang.NullPointerException
+	at org.eclipse.jdt.internal.compiler.classfmt.ClassFileReader.getMemberTypes(ClassFileReader.java:740)
+	at org.eclipse.jdt.internal.compiler.lookup.BinaryTypeBinding.cachePartsFrom(BinaryTypeBinding.java:436)
+	at org.eclipse.jdt.internal.compiler.lookup.LookupEnvironment.createBinaryTypeFrom(LookupEnvironment.java:1040)
+	at org.eclipse.jdt.internal.compiler.lookup.LookupEnvironment.createBinaryTypeFrom(LookupEnvironment.java:1021)
+	at org.eclipse.jdt.internal.compiler.Compiler.accept(Compiler.java:308)
+	at org.eclipse.jdt.internal.compiler.lookup.LookupEnvironment.askForType(LookupEnvironment.java:319)
+	at org.eclipse.jdt.internal.compiler.lookup.PackageBinding.getType(PackageBinding.java:195)
+	at org.eclipse.jdt.internal.compiler.lookup.Scope.findType(Scope.java:2020)
+	at org.eclipse.jdt.internal.compiler.lookup.Scope.getTypeOrPackage(Scope.java:3348)
+	at org.eclipse.jdt.internal.compiler.lookup.Scope.getBinding(Scope.java:2286)
+	at org.eclipse.jdt.internal.compiler.lookup.BlockScope.getBinding(BlockScope.java:490)
+	at org.eclipse.jdt.internal.compiler.ast.QualifiedNameReference.resolveType(QualifiedNameReference.java:1020)
+	at org.eclipse.jdt.internal.compiler.ast.MessageSend.resolveType(MessageSend.java:678)
+	at org.eclipse.jdt.internal.compiler.ast.Expression.resolve(Expression.java:1034)
+	at org.eclipse.jdt.internal.compiler.ast.AbstractMethodDeclaration.resolveStatements(AbstractMethodDeclaration.java:641)
+	at org.eclipse.jdt.internal.compiler.ast.MethodDeclaration.resolveStatements(MethodDeclaration.java:316)
+	at org.eclipse.jdt.internal.compiler.ast.AbstractMethodDeclaration.resolve(AbstractMethodDeclaration.java:551)
+	at org.eclipse.jdt.internal.compiler.ast.TypeDeclaration.resolve(TypeDeclaration.java:1229)
+	at org.eclipse.jdt.internal.compiler.ast.TypeDeclaration.resolve(TypeDeclaration.java:1354)
+	at org.eclipse.jdt.internal.compiler.ast.CompilationUnitDeclaration.resolve(CompilationUnitDeclaration.java:652)
+	at org.eclipse.jdt.internal.compiler.Compiler.resolve(Compiler.java:1055)
+	at org.eclipse.jdt.internal.compiler.Compiler.resolve(Compiler.java:1100)
+	at org.eclipse.jdt.internal.core.CompilationUnitProblemFinder.process_aroundBody0(CompilationUnitProblemFinder.java:280)
+	at org.eclipse.jdt.internal.core.CompilationUnitProblemFinder$AjcClosure1.run(CompilationUnitProblemFinder.java:1)
+	at org.eclipse.contribution.jdt.itdawareness.ITDAwarenessAspect.ajc$around$org_eclipse_contribution_jdt_itdawareness_ITDAwarenessAspect$4$8b05d765proceed(ITDAwarenessAspect.aj:231)
+	at org.eclipse.contribution.jdt.itdawareness.ITDAwarenessAspect.ajc$around$org_eclipse_contribution_jdt_itdawareness_ITDAwarenessAspect$4$8b05d765(ITDAwarenessAspect.aj:244)
+	at org.eclipse.jdt.internal.core.CompilationUnitProblemFinder.process(CompilationUnitProblemFinder.java:247)
+	at org.eclipse.jdt.internal.core.CompilationUnitProblemFinder.process(CompilationUnitProblemFinder.java:346)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.makeConsistent(ReconcileWorkingCopyOperation.java:193)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.executeOperation(ReconcileWorkingCopyOperation.java:94)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.run(JavaModelOperation.java:736)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.runOperation(JavaModelOperation.java:802)
+	at org.eclipse.jdt.internal.core.CompilationUnit.reconcile(CompilationUnit.java:1322)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:131)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.access$0(JavaReconcilingStrategy.java:113)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy$1.run(JavaReconcilingStrategy.java:93)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:90)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.initialReconcile(JavaReconcilingStrategy.java:188)
+	at org.eclipse.jdt.internal.ui.text.CompositeReconcilingStrategy.initialReconcile(CompositeReconcilingStrategy.java:122)
+	at org.eclipse.jdt.internal.ui.text.JavaCompositeReconcilingStrategy.initialReconcile(JavaCompositeReconcilingStrategy.java:139)
+	at org.eclipse.jface.text.reconciler.MonoReconciler.initialProcess(MonoReconciler.java:98)
+	at org.eclipse.jdt.internal.ui.text.JavaReconciler.initialProcess(JavaReconciler.java:423)
+	at org.eclipse.jface.text.reconciler.AbstractReconciler$BackgroundThread.run(AbstractReconciler.java:177)
+!SUBENTRY 1 org.eclipse.jdt.core 4 1005 2019-07-10 11:53:00.153
+!MESSAGE java.lang.NullPointerException
+!STACK 0
+java.lang.NullPointerException
+	at org.eclipse.jdt.internal.compiler.classfmt.ClassFileReader.getMemberTypes(ClassFileReader.java:740)
+	at org.eclipse.jdt.internal.compiler.lookup.BinaryTypeBinding.cachePartsFrom(BinaryTypeBinding.java:436)
+	at org.eclipse.jdt.internal.compiler.lookup.LookupEnvironment.createBinaryTypeFrom(LookupEnvironment.java:1040)
+	at org.eclipse.jdt.internal.compiler.lookup.LookupEnvironment.createBinaryTypeFrom(LookupEnvironment.java:1021)
+	at org.eclipse.jdt.internal.compiler.Compiler.accept(Compiler.java:308)
+	at org.eclipse.jdt.internal.compiler.lookup.LookupEnvironment.askForType(LookupEnvironment.java:319)
+	at org.eclipse.jdt.internal.compiler.lookup.PackageBinding.getType(PackageBinding.java:195)
+	at org.eclipse.jdt.internal.compiler.lookup.Scope.findType(Scope.java:2020)
+	at org.eclipse.jdt.internal.compiler.lookup.Scope.getTypeOrPackage(Scope.java:3348)
+	at org.eclipse.jdt.internal.compiler.lookup.Scope.getBinding(Scope.java:2286)
+	at org.eclipse.jdt.internal.compiler.lookup.BlockScope.getBinding(BlockScope.java:490)
+	at org.eclipse.jdt.internal.compiler.ast.QualifiedNameReference.resolveType(QualifiedNameReference.java:1020)
+	at org.eclipse.jdt.internal.compiler.ast.MessageSend.resolveType(MessageSend.java:678)
+	at org.eclipse.jdt.internal.compiler.ast.Expression.resolve(Expression.java:1034)
+	at org.eclipse.jdt.internal.compiler.ast.AbstractMethodDeclaration.resolveStatements(AbstractMethodDeclaration.java:641)
+	at org.eclipse.jdt.internal.compiler.ast.MethodDeclaration.resolveStatements(MethodDeclaration.java:316)
+	at org.eclipse.jdt.internal.compiler.ast.AbstractMethodDeclaration.resolve(AbstractMethodDeclaration.java:551)
+	at org.eclipse.jdt.internal.compiler.ast.TypeDeclaration.resolve(TypeDeclaration.java:1229)
+	at org.eclipse.jdt.internal.compiler.ast.TypeDeclaration.resolve(TypeDeclaration.java:1354)
+	at org.eclipse.jdt.internal.compiler.ast.CompilationUnitDeclaration.resolve(CompilationUnitDeclaration.java:652)
+	at org.eclipse.jdt.internal.compiler.Compiler.resolve(Compiler.java:1055)
+	at org.eclipse.jdt.internal.compiler.Compiler.resolve(Compiler.java:1100)
+	at org.eclipse.jdt.internal.core.CompilationUnitProblemFinder.process_aroundBody0(CompilationUnitProblemFinder.java:280)
+	at org.eclipse.jdt.internal.core.CompilationUnitProblemFinder$AjcClosure1.run(CompilationUnitProblemFinder.java:1)
+	at org.eclipse.contribution.jdt.itdawareness.ITDAwarenessAspect.ajc$around$org_eclipse_contribution_jdt_itdawareness_ITDAwarenessAspect$4$8b05d765proceed(ITDAwarenessAspect.aj:231)
+	at org.eclipse.contribution.jdt.itdawareness.ITDAwarenessAspect.ajc$around$org_eclipse_contribution_jdt_itdawareness_ITDAwarenessAspect$4$8b05d765(ITDAwarenessAspect.aj:244)
+	at org.eclipse.jdt.internal.core.CompilationUnitProblemFinder.process(CompilationUnitProblemFinder.java:247)
+	at org.eclipse.jdt.internal.core.CompilationUnitProblemFinder.process(CompilationUnitProblemFinder.java:346)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.makeConsistent(ReconcileWorkingCopyOperation.java:193)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.executeOperation(ReconcileWorkingCopyOperation.java:94)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.run(JavaModelOperation.java:736)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.runOperation(JavaModelOperation.java:802)
+	at org.eclipse.jdt.internal.core.CompilationUnit.reconcile(CompilationUnit.java:1322)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:131)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.access$0(JavaReconcilingStrategy.java:113)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy$1.run(JavaReconcilingStrategy.java:93)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:90)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.initialReconcile(JavaReconcilingStrategy.java:188)
+	at org.eclipse.jdt.internal.ui.text.CompositeReconcilingStrategy.initialReconcile(CompositeReconcilingStrategy.java:122)
+	at org.eclipse.jdt.internal.ui.text.JavaCompositeReconcilingStrategy.initialReconcile(JavaCompositeReconcilingStrategy.java:139)
+	at org.eclipse.jface.text.reconciler.MonoReconciler.initialProcess(MonoReconciler.java:98)
+	at org.eclipse.jdt.internal.ui.text.JavaReconciler.initialProcess(JavaReconciler.java:423)
+	at org.eclipse.jface.text.reconciler.AbstractReconciler$BackgroundThread.run(AbstractReconciler.java:177)
+!SUBENTRY 1 org.eclipse.jdt.core 4 1005 2019-07-10 11:53:00.153
+!MESSAGE java.lang.NullPointerException
+!STACK 0
+java.lang.NullPointerException
+	at org.eclipse.jdt.internal.compiler.classfmt.ClassFileReader.getMemberTypes(ClassFileReader.java:740)
+	at org.eclipse.jdt.internal.compiler.lookup.BinaryTypeBinding.cachePartsFrom(BinaryTypeBinding.java:436)
+	at org.eclipse.jdt.internal.compiler.lookup.LookupEnvironment.createBinaryTypeFrom(LookupEnvironment.java:1040)
+	at org.eclipse.jdt.internal.compiler.lookup.LookupEnvironment.createBinaryTypeFrom(LookupEnvironment.java:1021)
+	at org.eclipse.jdt.internal.compiler.Compiler.accept(Compiler.java:308)
+	at org.eclipse.jdt.internal.compiler.lookup.LookupEnvironment.askForType(LookupEnvironment.java:319)
+	at org.eclipse.jdt.internal.compiler.lookup.PackageBinding.getType(PackageBinding.java:195)
+	at org.eclipse.jdt.internal.compiler.lookup.Scope.findType(Scope.java:2020)
+	at org.eclipse.jdt.internal.compiler.lookup.Scope.getTypeOrPackage(Scope.java:3348)
+	at org.eclipse.jdt.internal.compiler.lookup.Scope.getBinding(Scope.java:2286)
+	at org.eclipse.jdt.internal.compiler.lookup.BlockScope.getBinding(BlockScope.java:490)
+	at org.eclipse.jdt.internal.compiler.ast.QualifiedNameReference.resolveType(QualifiedNameReference.java:1020)
+	at org.eclipse.jdt.internal.compiler.ast.MessageSend.resolveType(MessageSend.java:678)
+	at org.eclipse.jdt.internal.compiler.ast.Expression.resolve(Expression.java:1034)
+	at org.eclipse.jdt.internal.compiler.ast.AbstractMethodDeclaration.resolveStatements(AbstractMethodDeclaration.java:641)
+	at org.eclipse.jdt.internal.compiler.ast.MethodDeclaration.resolveStatements(MethodDeclaration.java:316)
+	at org.eclipse.jdt.internal.compiler.ast.AbstractMethodDeclaration.resolve(AbstractMethodDeclaration.java:551)
+	at org.eclipse.jdt.internal.compiler.ast.TypeDeclaration.resolve(TypeDeclaration.java:1229)
+	at org.eclipse.jdt.internal.compiler.ast.TypeDeclaration.resolve(TypeDeclaration.java:1354)
+	at org.eclipse.jdt.internal.compiler.ast.CompilationUnitDeclaration.resolve(CompilationUnitDeclaration.java:652)
+	at org.eclipse.jdt.internal.compiler.Compiler.resolve(Compiler.java:1055)
+	at org.eclipse.jdt.internal.compiler.Compiler.resolve(Compiler.java:1100)
+	at org.eclipse.jdt.internal.core.CompilationUnitProblemFinder.process_aroundBody0(CompilationUnitProblemFinder.java:280)
+	at org.eclipse.jdt.internal.core.CompilationUnitProblemFinder$AjcClosure1.run(CompilationUnitProblemFinder.java:1)
+	at org.eclipse.contribution.jdt.itdawareness.ITDAwarenessAspect.ajc$around$org_eclipse_contribution_jdt_itdawareness_ITDAwarenessAspect$4$8b05d765proceed(ITDAwarenessAspect.aj:231)
+	at org.eclipse.contribution.jdt.itdawareness.ITDAwarenessAspect.ajc$around$org_eclipse_contribution_jdt_itdawareness_ITDAwarenessAspect$4$8b05d765(ITDAwarenessAspect.aj:244)
+	at org.eclipse.jdt.internal.core.CompilationUnitProblemFinder.process(CompilationUnitProblemFinder.java:247)
+	at org.eclipse.jdt.internal.core.CompilationUnitProblemFinder.process(CompilationUnitProblemFinder.java:346)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.makeConsistent(ReconcileWorkingCopyOperation.java:193)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.executeOperation(ReconcileWorkingCopyOperation.java:94)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.run(JavaModelOperation.java:736)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.runOperation(JavaModelOperation.java:802)
+	at org.eclipse.jdt.internal.core.CompilationUnit.reconcile(CompilationUnit.java:1322)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:131)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.access$0(JavaReconcilingStrategy.java:113)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy$1.run(JavaReconcilingStrategy.java:93)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:90)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.initialReconcile(JavaReconcilingStrategy.java:188)
+	at org.eclipse.jdt.internal.ui.text.CompositeReconcilingStrategy.initialReconcile(CompositeReconcilingStrategy.java:122)
+	at org.eclipse.jdt.internal.ui.text.JavaCompositeReconcilingStrategy.initialReconcile(JavaCompositeReconcilingStrategy.java:139)
+	at org.eclipse.jface.text.reconciler.MonoReconciler.initialProcess(MonoReconciler.java:98)
+	at org.eclipse.jdt.internal.ui.text.JavaReconciler.initialProcess(JavaReconciler.java:423)
+	at org.eclipse.jface.text.reconciler.AbstractReconciler$BackgroundThread.run(AbstractReconciler.java:177)
+
+!ENTRY org.eclipse.jdt.ui 4 0 2019-07-10 11:53:00.154
+!MESSAGE Error in JDT Core during reconcile
+!STACK 1
+Java Model Exception: java.lang.NullPointerException
+	at org.eclipse.jdt.internal.core.CompilationUnitProblemFinder.process_aroundBody0(CompilationUnitProblemFinder.java:324)
+	at org.eclipse.jdt.internal.core.CompilationUnitProblemFinder$AjcClosure1.run(CompilationUnitProblemFinder.java:1)
+	at org.eclipse.contribution.jdt.itdawareness.ITDAwarenessAspect.ajc$around$org_eclipse_contribution_jdt_itdawareness_ITDAwarenessAspect$4$8b05d765proceed(ITDAwarenessAspect.aj:231)
+	at org.eclipse.contribution.jdt.itdawareness.ITDAwarenessAspect.ajc$around$org_eclipse_contribution_jdt_itdawareness_ITDAwarenessAspect$4$8b05d765(ITDAwarenessAspect.aj:244)
+	at org.eclipse.jdt.internal.core.CompilationUnitProblemFinder.process(CompilationUnitProblemFinder.java:247)
+	at org.eclipse.jdt.internal.core.CompilationUnitProblemFinder.process(CompilationUnitProblemFinder.java:346)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.makeConsistent(ReconcileWorkingCopyOperation.java:193)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.executeOperation(ReconcileWorkingCopyOperation.java:94)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.run(JavaModelOperation.java:736)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.runOperation(JavaModelOperation.java:802)
+	at org.eclipse.jdt.internal.core.CompilationUnit.reconcile(CompilationUnit.java:1322)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:131)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.access$0(JavaReconcilingStrategy.java:113)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy$1.run(JavaReconcilingStrategy.java:93)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:90)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.initialReconcile(JavaReconcilingStrategy.java:188)
+	at org.eclipse.jdt.internal.ui.text.CompositeReconcilingStrategy.initialReconcile(CompositeReconcilingStrategy.java:122)
+	at org.eclipse.jdt.internal.ui.text.JavaCompositeReconcilingStrategy.initialReconcile(JavaCompositeReconcilingStrategy.java:139)
+	at org.eclipse.jface.text.reconciler.MonoReconciler.initialProcess(MonoReconciler.java:98)
+	at org.eclipse.jdt.internal.ui.text.JavaReconciler.initialProcess(JavaReconciler.java:423)
+	at org.eclipse.jface.text.reconciler.AbstractReconciler$BackgroundThread.run(AbstractReconciler.java:177)
+Caused by: java.lang.NullPointerException
+	at org.eclipse.jdt.internal.compiler.classfmt.ClassFileReader.getMemberTypes(ClassFileReader.java:740)
+	at org.eclipse.jdt.internal.compiler.lookup.BinaryTypeBinding.cachePartsFrom(BinaryTypeBinding.java:436)
+	at org.eclipse.jdt.internal.compiler.lookup.LookupEnvironment.createBinaryTypeFrom(LookupEnvironment.java:1040)
+	at org.eclipse.jdt.internal.compiler.lookup.LookupEnvironment.createBinaryTypeFrom(LookupEnvironment.java:1021)
+	at org.eclipse.jdt.internal.compiler.Compiler.accept(Compiler.java:308)
+	at org.eclipse.jdt.internal.compiler.lookup.LookupEnvironment.askForType(LookupEnvironment.java:319)
+	at org.eclipse.jdt.internal.compiler.lookup.PackageBinding.getType(PackageBinding.java:195)
+	at org.eclipse.jdt.internal.compiler.lookup.Scope.findType(Scope.java:2020)
+	at org.eclipse.jdt.internal.compiler.lookup.Scope.getTypeOrPackage(Scope.java:3348)
+	at org.eclipse.jdt.internal.compiler.lookup.Scope.getBinding(Scope.java:2286)
+	at org.eclipse.jdt.internal.compiler.lookup.BlockScope.getBinding(BlockScope.java:490)
+	at org.eclipse.jdt.internal.compiler.ast.QualifiedNameReference.resolveType(QualifiedNameReference.java:1020)
+	at org.eclipse.jdt.internal.compiler.ast.MessageSend.resolveType(MessageSend.java:678)
+	at org.eclipse.jdt.internal.compiler.ast.Expression.resolve(Expression.java:1034)
+	at org.eclipse.jdt.internal.compiler.ast.AbstractMethodDeclaration.resolveStatements(AbstractMethodDeclaration.java:641)
+	at org.eclipse.jdt.internal.compiler.ast.MethodDeclaration.resolveStatements(MethodDeclaration.java:316)
+	at org.eclipse.jdt.internal.compiler.ast.AbstractMethodDeclaration.resolve(AbstractMethodDeclaration.java:551)
+	at org.eclipse.jdt.internal.compiler.ast.TypeDeclaration.resolve(TypeDeclaration.java:1229)
+	at org.eclipse.jdt.internal.compiler.ast.TypeDeclaration.resolve(TypeDeclaration.java:1354)
+	at org.eclipse.jdt.internal.compiler.ast.CompilationUnitDeclaration.resolve(CompilationUnitDeclaration.java:652)
+	at org.eclipse.jdt.internal.compiler.Compiler.resolve(Compiler.java:1055)
+	at org.eclipse.jdt.internal.compiler.Compiler.resolve(Compiler.java:1100)
+	at org.eclipse.jdt.internal.core.CompilationUnitProblemFinder.process_aroundBody0(CompilationUnitProblemFinder.java:280)
+	... 21 more
+Caused by: java.lang.NullPointerException
+	at org.eclipse.jdt.internal.compiler.classfmt.ClassFileReader.getMemberTypes(ClassFileReader.java:740)
+	at org.eclipse.jdt.internal.compiler.lookup.BinaryTypeBinding.cachePartsFrom(BinaryTypeBinding.java:436)
+	at org.eclipse.jdt.internal.compiler.lookup.LookupEnvironment.createBinaryTypeFrom(LookupEnvironment.java:1040)
+	at org.eclipse.jdt.internal.compiler.lookup.LookupEnvironment.createBinaryTypeFrom(LookupEnvironment.java:1021)
+	at org.eclipse.jdt.internal.compiler.Compiler.accept(Compiler.java:308)
+	at org.eclipse.jdt.internal.compiler.lookup.LookupEnvironment.askForType(LookupEnvironment.java:319)
+	at org.eclipse.jdt.internal.compiler.lookup.PackageBinding.getType(PackageBinding.java:195)
+	at org.eclipse.jdt.internal.compiler.lookup.Scope.findType(Scope.java:2020)
+	at org.eclipse.jdt.internal.compiler.lookup.Scope.getTypeOrPackage(Scope.java:3348)
+	at org.eclipse.jdt.internal.compiler.lookup.Scope.getBinding(Scope.java:2286)
+	at org.eclipse.jdt.internal.compiler.lookup.BlockScope.getBinding(BlockScope.java:490)
+	at org.eclipse.jdt.internal.compiler.ast.QualifiedNameReference.resolveType(QualifiedNameReference.java:1020)
+	at org.eclipse.jdt.internal.compiler.ast.MessageSend.resolveType(MessageSend.java:678)
+	at org.eclipse.jdt.internal.compiler.ast.Expression.resolve(Expression.java:1034)
+	at org.eclipse.jdt.internal.compiler.ast.AbstractMethodDeclaration.resolveStatements(AbstractMethodDeclaration.java:641)
+	at org.eclipse.jdt.internal.compiler.ast.MethodDeclaration.resolveStatements(MethodDeclaration.java:316)
+	at org.eclipse.jdt.internal.compiler.ast.AbstractMethodDeclaration.resolve(AbstractMethodDeclaration.java:551)
+	at org.eclipse.jdt.internal.compiler.ast.TypeDeclaration.resolve(TypeDeclaration.java:1229)
+	at org.eclipse.jdt.internal.compiler.ast.TypeDeclaration.resolve(TypeDeclaration.java:1354)
+	at org.eclipse.jdt.internal.compiler.ast.CompilationUnitDeclaration.resolve(CompilationUnitDeclaration.java:652)
+	at org.eclipse.jdt.internal.compiler.Compiler.resolve(Compiler.java:1055)
+	at org.eclipse.jdt.internal.compiler.Compiler.resolve(Compiler.java:1100)
+	at org.eclipse.jdt.internal.core.CompilationUnitProblemFinder.process_aroundBody0(CompilationUnitProblemFinder.java:280)
+	at org.eclipse.jdt.internal.core.CompilationUnitProblemFinder$AjcClosure1.run(CompilationUnitProblemFinder.java:1)
+	at org.eclipse.contribution.jdt.itdawareness.ITDAwarenessAspect.ajc$around$org_eclipse_contribution_jdt_itdawareness_ITDAwarenessAspect$4$8b05d765proceed(ITDAwarenessAspect.aj:231)
+	at org.eclipse.contribution.jdt.itdawareness.ITDAwarenessAspect.ajc$around$org_eclipse_contribution_jdt_itdawareness_ITDAwarenessAspect$4$8b05d765(ITDAwarenessAspect.aj:244)
+	at org.eclipse.jdt.internal.core.CompilationUnitProblemFinder.process(CompilationUnitProblemFinder.java:247)
+	at org.eclipse.jdt.internal.core.CompilationUnitProblemFinder.process(CompilationUnitProblemFinder.java:346)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.makeConsistent(ReconcileWorkingCopyOperation.java:193)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.executeOperation(ReconcileWorkingCopyOperation.java:94)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.run(JavaModelOperation.java:736)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.runOperation(JavaModelOperation.java:802)
+	at org.eclipse.jdt.internal.core.CompilationUnit.reconcile(CompilationUnit.java:1322)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:131)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.access$0(JavaReconcilingStrategy.java:113)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy$1.run(JavaReconcilingStrategy.java:93)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:90)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.initialReconcile(JavaReconcilingStrategy.java:188)
+	at org.eclipse.jdt.internal.ui.text.CompositeReconcilingStrategy.initialReconcile(CompositeReconcilingStrategy.java:122)
+	at org.eclipse.jdt.internal.ui.text.JavaCompositeReconcilingStrategy.initialReconcile(JavaCompositeReconcilingStrategy.java:139)
+	at org.eclipse.jface.text.reconciler.MonoReconciler.initialProcess(MonoReconciler.java:98)
+	at org.eclipse.jdt.internal.ui.text.JavaReconciler.initialProcess(JavaReconciler.java:423)
+	at org.eclipse.jface.text.reconciler.AbstractReconciler$BackgroundThread.run(AbstractReconciler.java:177)
+!SUBENTRY 1 org.eclipse.jdt.core 4 1005 2019-07-10 11:53:00.154
+!MESSAGE java.lang.NullPointerException
+!STACK 0
+java.lang.NullPointerException
+	at org.eclipse.jdt.internal.compiler.classfmt.ClassFileReader.getMemberTypes(ClassFileReader.java:740)
+	at org.eclipse.jdt.internal.compiler.lookup.BinaryTypeBinding.cachePartsFrom(BinaryTypeBinding.java:436)
+	at org.eclipse.jdt.internal.compiler.lookup.LookupEnvironment.createBinaryTypeFrom(LookupEnvironment.java:1040)
+	at org.eclipse.jdt.internal.compiler.lookup.LookupEnvironment.createBinaryTypeFrom(LookupEnvironment.java:1021)
+	at org.eclipse.jdt.internal.compiler.Compiler.accept(Compiler.java:308)
+	at org.eclipse.jdt.internal.compiler.lookup.LookupEnvironment.askForType(LookupEnvironment.java:319)
+	at org.eclipse.jdt.internal.compiler.lookup.PackageBinding.getType(PackageBinding.java:195)
+	at org.eclipse.jdt.internal.compiler.lookup.Scope.findType(Scope.java:2020)
+	at org.eclipse.jdt.internal.compiler.lookup.Scope.getTypeOrPackage(Scope.java:3348)
+	at org.eclipse.jdt.internal.compiler.lookup.Scope.getBinding(Scope.java:2286)
+	at org.eclipse.jdt.internal.compiler.lookup.BlockScope.getBinding(BlockScope.java:490)
+	at org.eclipse.jdt.internal.compiler.ast.QualifiedNameReference.resolveType(QualifiedNameReference.java:1020)
+	at org.eclipse.jdt.internal.compiler.ast.MessageSend.resolveType(MessageSend.java:678)
+	at org.eclipse.jdt.internal.compiler.ast.Expression.resolve(Expression.java:1034)
+	at org.eclipse.jdt.internal.compiler.ast.AbstractMethodDeclaration.resolveStatements(AbstractMethodDeclaration.java:641)
+	at org.eclipse.jdt.internal.compiler.ast.MethodDeclaration.resolveStatements(MethodDeclaration.java:316)
+	at org.eclipse.jdt.internal.compiler.ast.AbstractMethodDeclaration.resolve(AbstractMethodDeclaration.java:551)
+	at org.eclipse.jdt.internal.compiler.ast.TypeDeclaration.resolve(TypeDeclaration.java:1229)
+	at org.eclipse.jdt.internal.compiler.ast.TypeDeclaration.resolve(TypeDeclaration.java:1354)
+	at org.eclipse.jdt.internal.compiler.ast.CompilationUnitDeclaration.resolve(CompilationUnitDeclaration.java:652)
+	at org.eclipse.jdt.internal.compiler.Compiler.resolve(Compiler.java:1055)
+	at org.eclipse.jdt.internal.compiler.Compiler.resolve(Compiler.java:1100)
+	at org.eclipse.jdt.internal.core.CompilationUnitProblemFinder.process_aroundBody0(CompilationUnitProblemFinder.java:280)
+	at org.eclipse.jdt.internal.core.CompilationUnitProblemFinder$AjcClosure1.run(CompilationUnitProblemFinder.java:1)
+	at org.eclipse.contribution.jdt.itdawareness.ITDAwarenessAspect.ajc$around$org_eclipse_contribution_jdt_itdawareness_ITDAwarenessAspect$4$8b05d765proceed(ITDAwarenessAspect.aj:231)
+	at org.eclipse.contribution.jdt.itdawareness.ITDAwarenessAspect.ajc$around$org_eclipse_contribution_jdt_itdawareness_ITDAwarenessAspect$4$8b05d765(ITDAwarenessAspect.aj:244)
+	at org.eclipse.jdt.internal.core.CompilationUnitProblemFinder.process(CompilationUnitProblemFinder.java:247)
+	at org.eclipse.jdt.internal.core.CompilationUnitProblemFinder.process(CompilationUnitProblemFinder.java:346)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.makeConsistent(ReconcileWorkingCopyOperation.java:193)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.executeOperation(ReconcileWorkingCopyOperation.java:94)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.run(JavaModelOperation.java:736)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.runOperation(JavaModelOperation.java:802)
+	at org.eclipse.jdt.internal.core.CompilationUnit.reconcile(CompilationUnit.java:1322)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:131)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.access$0(JavaReconcilingStrategy.java:113)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy$1.run(JavaReconcilingStrategy.java:93)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:90)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.initialReconcile(JavaReconcilingStrategy.java:188)
+	at org.eclipse.jdt.internal.ui.text.CompositeReconcilingStrategy.initialReconcile(CompositeReconcilingStrategy.java:122)
+	at org.eclipse.jdt.internal.ui.text.JavaCompositeReconcilingStrategy.initialReconcile(JavaCompositeReconcilingStrategy.java:139)
+	at org.eclipse.jface.text.reconciler.MonoReconciler.initialProcess(MonoReconciler.java:98)
+	at org.eclipse.jdt.internal.ui.text.JavaReconciler.initialProcess(JavaReconciler.java:423)
+	at org.eclipse.jface.text.reconciler.AbstractReconciler$BackgroundThread.run(AbstractReconciler.java:177)
+
+!ENTRY org.eclipse.m2e.logback.appender 2 0 2019-07-10 11:56:27.624
+!MESSAGE The POM for com.sun.xml.bind:jaxb-core:jar:2.2.11 is invalid, transitive dependencies (if any) will not be available, enable debug logging for more details
+
+!ENTRY org.eclipse.m2e.logback.appender 2 0 2019-07-10 11:56:27.640
+!MESSAGE The POM for com.sun.xml.bind:jaxb-impl:jar:2.2.11 is invalid, transitive dependencies (if any) will not be available, enable debug logging for more details
+
+!ENTRY org.eclipse.m2e.logback.appender 2 0 2019-07-10 11:56:30.194
+!MESSAGE The POM for com.sun.xml.bind:jaxb-core:jar:2.2.11 is invalid, transitive dependencies (if any) will not be available, enable debug logging for more details
+
+!ENTRY org.eclipse.m2e.logback.appender 2 0 2019-07-10 11:56:30.202
+!MESSAGE The POM for com.sun.xml.bind:jaxb-impl:jar:2.2.11 is invalid, transitive dependencies (if any) will not be available, enable debug logging for more details
+
+!ENTRY org.eclipse.jdt.debug 2 0 2019-07-10 11:56:43.140
+!MESSAGE Unable to find location of java.lang.Thread.setName() in debuggee JVM, for type java.lang.Thread
+
+!ENTRY org.eclipse.jface 2 0 2019-07-10 12:03:42.066
+!MESSAGE Keybinding conflicts occurred.  They may interfere with normal accelerator operation.
+!SUBENTRY 1 org.eclipse.jface 2 0 2019-07-10 12:03:42.066
+!MESSAGE A conflict occurred for CTRL+R:
+Binding(CTRL+R,
+	ParameterizedCommand(Command(org.eclipse.debug.ui.commands.RunToLine,Run to Line,
+		Resume and break when execution reaches the current line,
+		Category(org.eclipse.debug.ui.category.run,Run/Debug,Run/Debug command category,true),
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@4809db0b,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.debug.ui.debugging,,,system)
+Binding(CTRL+R,
+	ParameterizedCommand(Command(org.springframework.ide.eclipse.boot.restart.commands.restart,Trigger Restart,
+		Restart Spring Boot Application,
+		Category(org.eclipse.debug.ui.category.run,Run/Debug,Run/Debug command category,true),
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@3ed85f73,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.debug.ui.console,,,system)
+
+!ENTRY org.eclipse.jface.text 2 0 2019-07-10 13:53:09.043
+!MESSAGE Duplicate template id: 'org.eclipse.wst.xslt.templates.xpath.boolean'

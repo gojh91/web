@@ -42,5 +42,11 @@ public class MemberDaoImpl implements MemberDao{
 		session.update("memberUpdate", member);
 	}
 
+	@Override
+	public int memberIdCnt(String mb_id) {
+		// TODO Auto-generated method stub
+		return session.selectOne("memberIdCnt", mb_id);
+	}
+
 
 }

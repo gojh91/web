@@ -74,6 +74,13 @@
 		, mb_addr2=#{mb_addr2}
 		where mb_id=#{mb_id}
 	</update>
+	
+	<select id="memberIdCnt" parameterType="java.lang.String"
+		resultType="int">
+   		<![CDATA[
+   			select count(*) from member where mb_id = #{mb_id}
+   		]]>
+	</select>
 
 
 

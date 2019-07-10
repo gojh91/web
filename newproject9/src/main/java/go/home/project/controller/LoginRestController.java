@@ -21,5 +21,12 @@ public class LoginRestController {
 		int nickcheck = ms.memberNickNameCnt(mb_nickName);//닉네임 중복 갯수
 		return nickcheck;
 	}
+	
+	@RequestMapping("idChk")
+	public int idChk(Model model, HttpServletRequest request, String mb_id ) {
+		System.out.println("@RequestMapping(value = \"idChk\")");
+		int idcheck = ms.memberIdCnt(mb_id);//아이디 중복 갯수
+		return idcheck;
+	}
 
 }
