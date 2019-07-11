@@ -19,6 +19,7 @@
 	<a>리뷰피드</a>
 	<c:if test="${checkLogin == 1}">
 		${loginMember.mb_nickName}
+		<a onclick="location.href='memberLogout.do'">로그아웃</a>
 	</c:if>
 	<c:if test="${checkLogin != 1}">
 		<a onclick="location.href='login.do'">로그인</a>

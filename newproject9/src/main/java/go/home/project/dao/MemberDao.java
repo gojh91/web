@@ -12,4 +12,6 @@ public interface MemberDao {
 	int memberNickNameCnt(String mb_nickName);
 	void update(Member member);
 	int memberIdCnt(String mb_id);
+	void insert(Member member);
+	void memberdelete(String mb_id);
 }

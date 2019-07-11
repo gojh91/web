@@ -47,4 +47,16 @@ public class MemberServiceImpl implements MemberService{
 		return md.memberIdCnt(mb_id);
 	}
 
+	@Override
+	public void insert(Member member) {
+		// TODO Auto-generated method stub
+		md.insert(member);
+	}
+
+	@Override
+	public void memberdelete(String mb_id) {
+		// TODO Auto-generated method stub
+		md.memberdelete(mb_id);
+	}
+
 }

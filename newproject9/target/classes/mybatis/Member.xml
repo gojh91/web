@@ -25,9 +25,10 @@
 	</resultMap>
 
 	<select id="checklogin" parameterType="Member" resultType="int">
-		<![CDATA[
-			select count(*) from member where mb_id = #{mb_id} and mb_pw = #{mb_pw} 
-		]]>
+		select count(*) from member
+		where mb_id = #{mb_id}
+		and mb_pw = #{mb_pw}
+		<if test="mb_status!=null"> and mb_status = '1' </if>
 	</select>
 
 	<select id="memberdetail" parameterType="Member"
@@ -63,7 +64,8 @@
 
 	<update id="memberUpdate" parameterType="Member">
 		update member set mb_nickname=#{mb_nickName}
-		, mb_pw=#{mb_pw}, mb_name=#{mb_name}
+		, mb_pw=#{mb_pw},
+		mb_name=#{mb_name}
 		<if test="mb_imgSrc!=null">, mb_imgSrc=#{mb_imgSrc}</if>
 		, mb_sex=#{mb_sex}
 		, mb_phone=#{mb_phone}
@@ -72,15 +74,33 @@
 		, mb_postCode=#{mb_postCode}
 		, mb_addr1=#{mb_addr1}
 		, mb_addr2=#{mb_addr2}
+		<if test="mb_regDate!=null">, mb_regDate=#{mb_regDate}</if>
+		<if test="mb_wdDate!=null">, mb_wdDate=#{mb_wdDate}</if>
+		<if test="mb_authority!=null">, mb_authority=#{mb_authority}</if>
+		<if test="mb_status!=null">, mb_status=#{mb_status}</if>
 		where mb_id=#{mb_id}
 	</update>
-	
+
 	<select id="memberIdCnt" parameterType="java.lang.String"
 		resultType="int">
    		<![CDATA[
    			select count(*) from member where mb_id = #{mb_id}
    		]]>
 	</select>
+
+	<insert id="memberInsert" parameterType="Member">
+		insert into member
+		values (#{mb_id}, #{mb_nickName}, #{mb_pw}, #{mb_name},
+		#{mb_imgSrc},
+		#{mb_sex}, #{mb_phone},
+		#{mb_birthDate}, #{mb_email}, #{mb_postCode},
+		#{mb_addr1}, #{mb_addr2}, NULL, '1',
+		'1', sysdate, NULL)
+	</insert>
+
+	<update id="memberDelete" parameterType="java.lang.String">
+		update member set mb_status='2' where mb_id=#{mb_id}
+	</update>
 
 
 

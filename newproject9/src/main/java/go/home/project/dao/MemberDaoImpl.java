@@ -47,6 +47,16 @@ public class MemberDaoImpl implements MemberDao{
 		// TODO Auto-generated method stub
 		return session.selectOne("memberIdCnt", mb_id);
 	}
+	
+	public void insert(Member member) {
+		session.insert("memberInsert", member);
+	}
+
+	@Override
+	public void memberdelete(String mb_id) {
+		// TODO Auto-generated method stub
+		session.update("memberDelete", mb_id);
+	}
 
 
 }

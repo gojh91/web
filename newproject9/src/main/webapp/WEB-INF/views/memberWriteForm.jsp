@@ -12,6 +12,8 @@
 
 <script src="http://d1p7wdleee1q2z.cloudfront.net/post/search.min.js"></script>
 <script type="text/javascript">
+	var iddupl = false;
+	var nickdupl = false;
 	function validCheck() {
 
 		if (frm.mb_pw.value != frm.mb_pw_chk.value) {
@@ -33,8 +35,16 @@
 		if (count < 3) {
 			alert("3개 다 동의하셔야 합니다.");
 		} else {
-			// alert(count+" 개 선택했습니다.");	
-			flag = true;
+			if(iddupl == false){
+				alert("ID 중복확인 하십시오");
+			}else{
+				if(nickdupl == false){
+					alert("닉네임 중복확인 하십시오");
+				}else{
+					flag = true;
+				}
+			}
+			
 		}
 		return flag;
 	}
@@ -63,6 +73,7 @@
 						alert("Nickname is duplicate");
 					} else {
 						alert("Nickname is available");
+						nickdupl = true;
 					}
 				}
 			});
@@ -85,6 +96,7 @@
 						alert("ID is duplicate");
 					} else {
 						alert("ID is available");
+						iddupl = true;
 					}
 				}
 			});
@@ -102,7 +114,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<form action="memberWrite.do" method="get" name="frm"
+	<form action="memberWrite.do" method="post" name="frm"
 		onsubmit="return validCheck()">
 		<fieldset class="boundBox">
 			<!-- <legend class="titleFont" style="width:10px; font-size:2em;">회원가입 등록</legend> -->

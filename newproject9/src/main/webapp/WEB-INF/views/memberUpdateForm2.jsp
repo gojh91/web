@@ -15,8 +15,15 @@
 	Member member = (Member) request.getAttribute("member");
 %>
 <script type="text/javascript">
-	function nickNamechk() { 
-	var nickName = '<%=member.getMb_nickName()%>'
+	var flag = false;
+	function validCheck() {
+		if(flag == false){
+			alert("Check duplicate");
+		}
+		return flag;
+	}
+	function nickNamechk() {
+		var nickName = '<%=member.getMb_nickName()%>'
 		if(nickName != frm.mb_nickName.value){
 			$.ajax({	
 				url : "<%=context%>/LoginRest/nickNameChk.do",
@@ -28,11 +35,13 @@
 						alert("Nickname is duplicate");
 					} else {
 						alert("Nickname is available");
+						flag = true;
 					}
 				}
 			});
 		} else {
 			alert("Nickname is available");
+			flag = true;
 		}
 	}
 	$(function() {
@@ -44,7 +53,7 @@
 </head>
 <body>
 
-	<form action="memberUpdate.do" method="post" name="frm">
+	<form action="memberUpdate.do" method="post" name="frm" onsubmit="return validCheck()">
 		<table>
 			<tr align="center">
 				<th><p style="margin-top: 50px;">아이디</p></th>

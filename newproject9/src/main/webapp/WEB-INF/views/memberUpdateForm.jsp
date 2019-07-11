@@ -16,6 +16,13 @@
 <script src="http://d1p7wdleee1q2z.cloudfront.net/post/search.min.js"></script>
 
 <script type="text/javascript">
+	var flag = false;
+	function validCheck() {
+		if(flag == false){
+			alert("Check duplicate");
+		}
+		return flag;
+	}
 	function nickNamechk() { 
 		var nickName = '<%= member.getMb_nickName()%>'
 		if(nickName != frm.mb_nickName.value){
@@ -27,11 +34,13 @@
 						alert("Nickname is duplicate");
 					}else{
 						alert("Nickname is available");
+						flag = true;
 					}
 				}
 			});
 		} else {
 			alert("Nickname is available");
+			flag = true;
 		}
 	}
 	$(function() {
@@ -42,9 +51,8 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<button onclick="location.href='memberWithdrawalForm.do'">회원탈퇴</button>
 	<form action="memberUpdate.do" method="post" name="frm"
-		onsubmit="return pwCheck()">
+		onsubmit="return validCheck()">
 		<table>
 			<tr align="center">
 				<th>아이디</th>
@@ -131,7 +139,7 @@
 		<table>
 			<tr>
 				<td><button type="submit" style="margin-top: 20px;"
-						class="topBtn" onclick="save()">저장</button></td>
+						class="topBtn" >저장</button></td>
 				<td><button type="button" style="margin-top: 20px"
 						class="topBtn"
 						onclick="location.href='memberDeleteForm.do?mb_id=${member.mb_id}'">삭제</button></td>

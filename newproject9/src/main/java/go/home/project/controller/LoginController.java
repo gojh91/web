@@ -131,7 +131,7 @@ public class LoginController {
 	
 	@RequestMapping(value = "memberUpdate", method = RequestMethod.POST)
 	public String memberUpdate(HttpServletRequest request, Member member, Model model) {
-		System.out.println("@RequestMapping(value = \"memberUpdate\")");
+		System.out.println("@RequestMapping(value = \"memberUpdate\")");				
 
 		ms.update(member);//맴버 수정사항 업데이트
 		
@@ -153,11 +153,31 @@ public class LoginController {
 		return "memberWriteForm";
 	}
 	
-	@RequestMapping(value = "memberWrite")//회원가입 저장버튼
-	public String memberWrite() {
+	@RequestMapping(value = "memberWrite", method = RequestMethod.POST)//회원가입 저장버튼
+	public String memberWrite(HttpServletRequest request, Member member, Model model) {
 		System.out.println("@RequestMapping(value = \"memberWrite\")");
-		
-		
+		String str = member.getMb_birthDate();
+		if (str.length() > 9) {
+			member.setMb_birthDate(str.substring(0, 10));
+		}
+		ms.insert(member);
+		return "redirect:main.do";
+	}
+	
+	@RequestMapping(value = "memberDeleteForm")
+	public String memberDeleteForm(HttpServletRequest request, String mb_id, Model model) {
+		System.out.println("@RequestMapping(value = \"memberDeleteForm\")");
+		Member member = new Member();
+		member.setMb_id(mb_id);
+		member = ms.memberdetail(member); 
+		model.addAttribute("member", member);
+		return "memberDeleteForm";
+	}
+	
+	@RequestMapping(value = "memberDelete")
+	public String memberDelete(HttpServletRequest request, String mb_id, Model model) {
+		System.out.println("@RequestMapping(value = \"memberDelete\")");
+		ms.memberdelete(mb_id);
 		return "redirect:main.do";
 	}
 	
