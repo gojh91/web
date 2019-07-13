@@ -13,9 +13,10 @@
 		<input type = "password" name = "mb_pw" required = "required"
 		title = "패스워드">
 		<button type="submit">로그인</button>
+	</form>
 		<button onclick="location.href='memberIdFind.do'">아이디 찾기</button>
 		<button onclick="location.href='memberPwFind.do'">비밀번호 찾기</button>
 		
-	</form>
+	
 </body>
 </html>

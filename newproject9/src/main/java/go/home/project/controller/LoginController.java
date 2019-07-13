@@ -174,11 +174,23 @@ public class LoginController {
 		return "memberDeleteForm";
 	}
 	
-	@RequestMapping(value = "memberDelete")
+	@RequestMapping(value = "memberDelete", method = RequestMethod.POST)
 	public String memberDelete(HttpServletRequest request, String mb_id, Model model) {
 		System.out.println("@RequestMapping(value = \"memberDelete\")");
 		ms.memberdelete(mb_id);
 		return "redirect:main.do";
+	}
+	
+	@RequestMapping(value = "memberIdFind")
+	public String memberIdFind(Model model) {
+		System.out.println("@RequestMapping(value = \"memberIdFind\")");
+		return "memberIdFind";
+	}
+	
+	@RequestMapping(value = "memberPwFind")
+	public String memberPwFind(Model model) {
+		System.out.println("@RequestMapping(value = \"memberPwFind\")");
+		return "memberPwFind";
 	}
 	
 }

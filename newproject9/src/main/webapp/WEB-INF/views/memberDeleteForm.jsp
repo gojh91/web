@@ -53,6 +53,7 @@
 					<br /> <input type="checkbox" name="agree" value="1"> 안내
 					사항을 모두 확인하였으면, 이에 동의합니다.<br />
 					<br />
+					<input type="hidden" name = "mb_id" value = "${member.mb_id}">
 				</div>
 			</div>
 
