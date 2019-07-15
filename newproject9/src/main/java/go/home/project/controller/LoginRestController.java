@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import go.home.project.model.Member;
 import go.home.project.service.MemberService;
 
 @RestController
@@ -27,6 +28,18 @@ public class LoginRestController {
 		System.out.println("@RequestMapping(value = \"idChk\")");
 		int idcheck = ms.memberIdCnt(mb_id);//아이디 중복 갯수
 		return idcheck;
+	}
+	
+	@RequestMapping(value = "memberIdFind1")
+	public String memberIdFind1(Model model, String mb_email, String name, String nickName) {
+		System.out.println("@RequestMapping(value = \"memberIdFind1\")");
+		return "memberIdFind";
+	}
+	
+	@RequestMapping(value = "memberPwFind1")
+	public String memberPwFind1(Model model, String mb_email, String name, String nickName, String mb_id) {
+		System.out.println("@RequestMapping(value = \"memberPwFind1\")");
+		return "memberPwFind";
 	}
 
 }
