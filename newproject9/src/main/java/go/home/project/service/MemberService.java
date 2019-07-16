@@ -14,4 +14,6 @@ public interface MemberService {
 	void update(Member member);
 	void insert(Member member);
 	void memberdelete(String mb_id);
+	String idFind(Member member);
+	int pwFind(Member member);
 }

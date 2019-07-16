@@ -58,5 +58,17 @@ public class MemberDaoImpl implements MemberDao{
 		session.update("memberDelete", mb_id);
 	}
 
+	@Override
+	public String idFind(Member member) {
+		// TODO Auto-generated method stub
+		return session.selectOne("memberIdFind", member);
+	}
+	
+	@Override
+	public int pwFind(Member member) {
+		// TODO Auto-generated method stub
+		return session.selectOne("memberPwFind", member);
+	}
+
 
 }

@@ -37,19 +37,19 @@ function chk(){
 				<tr align="center">
 					<th style="padding-top: 10px">닉네임</th>
 					<td style="padding-top: 10px"><input type="text"
-						class="fieldBox" id="mb_nickName" name="mb_nickName"></td>
+						class="fieldBox" id="mb_nickName" name="mb_nickName" required></td>
 				</tr>
 
 				<tr align="center">
 					<th style="padding-top: 10px">이름</th>
 					<td style="padding-top: 10px"><input type="text"
-						class="fieldBox" id="mb_name" name="mb_name"></td>
+						class="fieldBox" id="mb_name" name="mb_name" required></td>
 				</tr>
 
 				<tr align="center">
 					<th style="padding-top: 10px">이메일 주소</th>
 					<td style="padding-top: 10px"><input type="text"
-						class="fieldBox" id="mb_email" name="mb_email"></td>
+						class="fieldBox" id="mb_email" name="mb_email" required></td>
 				</tr>
 
 				<tr align="center">

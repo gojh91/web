@@ -14,4 +14,6 @@ public interface MemberDao {
 	int memberIdCnt(String mb_id);
 	void insert(Member member);
 	void memberdelete(String mb_id);
+	String idFind(Member member);
+	int pwFind(Member member);
 }

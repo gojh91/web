@@ -101,6 +101,20 @@
 	<update id="memberDelete" parameterType="java.lang.String">
 		update member set mb_status='2' where mb_id=#{mb_id}
 	</update>
+	
+	<select id="memberIdFind" parameterType="Member"
+		resultType="java.lang.String">
+   		<![CDATA[
+   			select mb_id from member where mb_nickName = #{mb_nickName} and mb_email = #{mb_email} and mb_name = #{mb_name}
+   		]]>
+	</select>
+	
+	<select id="memberIdFind" parameterType="Member"
+		resultType="int">
+   		<![CDATA[
+   			select count(*) from member where mb_nickName = #{mb_nickName} and mb_email = #{mb_email} and mb_name = #{mb_name} and mb_id = #{mb_id}
+   		]]>
+	</select>
 
 
 

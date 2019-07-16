@@ -31,14 +31,29 @@ public class LoginRestController {
 	}
 	
 	@RequestMapping(value = "memberIdFind1")
-	public String memberIdFind1(Model model, String mb_email, String name, String nickName) {
+	public String memberIdFind1(Model model, String mb_email, String mb_name, String mb_nickName) {
 		System.out.println("@RequestMapping(value = \"memberIdFind1\")");
-		return "memberIdFind";
+		Member member = new Member();
+		member.setMb_email(mb_email);
+		member.setMb_name(mb_name);
+		member.setMb_nickName(mb_nickName);
+		String findid = ms.idFind(member);
+		return findid;
 	}
 	
 	@RequestMapping(value = "memberPwFind1")
-	public String memberPwFind1(Model model, String mb_email, String name, String nickName, String mb_id) {
+	public String memberPwFind1(Model model, String mb_email, String mb_name, String mb_nickName, String mb_id) {
 		System.out.println("@RequestMapping(value = \"memberPwFind1\")");
+		String result = "";
+		Member member = new Member();
+		member.setMb_id(mb_id);
+		member.setMb_email(mb_email);
+		member.setMb_name(mb_name);
+		member.setMb_nickName(mb_nickName);
+		int findpw = ms.pwFind(member);
+		if(findpw == 1) {
+			return 
+		}
 		return "memberPwFind";
 	}
 

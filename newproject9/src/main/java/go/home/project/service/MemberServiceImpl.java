@@ -59,4 +59,16 @@ public class MemberServiceImpl implements MemberService{
 		md.memberdelete(mb_id);
 	}
 
+	@Override
+	public String idFind(Member member) {
+		// TODO Auto-generated method stub
+		return md.idFind(member);
+	}
+	
+	@Override
+	public int pwFind(Member member) {
+		// TODO Auto-generated method stub
+		return md.pwFind(member);
+	}
+
 }
