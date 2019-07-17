@@ -42,7 +42,7 @@ public class LoginRestController {
 	}
 	
 	@RequestMapping(value = "memberPwFind1")
-	public String memberPwFind1(Model model, String mb_email, String mb_name, String mb_nickName, String mb_id) {
+	public int memberPwFind1(Model model, String mb_email, String mb_name, String mb_nickName, String mb_id) {
 		System.out.println("@RequestMapping(value = \"memberPwFind1\")");
 		String result = "";
 		Member member = new Member();
@@ -50,11 +50,9 @@ public class LoginRestController {
 		member.setMb_email(mb_email);
 		member.setMb_name(mb_name);
 		member.setMb_nickName(mb_nickName);
-		int findpw = ms.pwFind(member);
-		if(findpw == 1) {
-			return 
-		}
-		return "memberPwFind";
+		int findpw = ms.pwFind(member); //해당하는 맴버 count
+		
+		return findpw;
 	}
 
 }

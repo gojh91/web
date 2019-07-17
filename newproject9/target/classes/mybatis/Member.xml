@@ -109,7 +109,7 @@
    		]]>
 	</select>
 	
-	<select id="memberIdFind" parameterType="Member"
+	<select id="memberPwFind" parameterType="Member"
 		resultType="int">
    		<![CDATA[
    			select count(*) from member where mb_nickName = #{mb_nickName} and mb_email = #{mb_email} and mb_name = #{mb_name} and mb_id = #{mb_id}
