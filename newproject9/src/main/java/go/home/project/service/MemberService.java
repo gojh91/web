@@ -16,4 +16,5 @@ public interface MemberService {
 	void memberdelete(String mb_id);
 	String idFind(Member member);
 	int pwFind(Member member);
+	void changepw(Member member);
 }

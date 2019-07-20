@@ -15,7 +15,7 @@
 		<input type="text" name="keyword">
 		<button type="submit">검색</button>
 	</form>
-	<a>소셜네트워크</a>
+	<a href="memberBoardList.do">소셜네트워크</a>
 	<a>리뷰피드</a>
 	<c:if test="${checkLogin == 1}">
 		${loginMember.mb_nickName}

@@ -115,6 +115,10 @@
    			select count(*) from member where mb_nickName = #{mb_nickName} and mb_email = #{mb_email} and mb_name = #{mb_name} and mb_id = #{mb_id}
    		]]>
 	</select>
+	
+	<update id="changePw" parameterType="Member">
+		update member set mb_pw = #{mb_pw} where mb_id = #{mb_id} 
+	</update>
 
 
 

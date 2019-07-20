@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
 	<list key="org.eclipse.ui.internal.wizards.datatransfer.SmartImportRootWizardPage.knownSources">
+		<item value="C:\Users\goja9\Downloads\webproject\s20180704"/>
 		<item value="C:\Users\student\Downloads\workspace\newproject9"/>
 		<item value="C:\Users\goja9\Downloads\webproject\newproject9"/>
 		<item value="C:\Users\student\Downloads\workspace\newproject8"/>
@@ -113,7 +114,7 @@
 	<section name="CleanDialogSettings">
 		<item value="500" key="DIALOG_WIDTH"/>
 		<item value="false" key="TOGGLE_SELECTED"/>
-		<item value="401" key="DIALOG_HEIGHT"/>
+		<item value="402" key="DIALOG_HEIGHT"/>
 		<item value="390" key="DIALOG_X_ORIGIN"/>
 		<item value="225" key="DIALOG_Y_ORIGIN"/>
 	</section>

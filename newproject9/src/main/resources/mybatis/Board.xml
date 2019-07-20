@@ -3,5 +3,18 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="Board">
+	<select id="memberboardlist" parameterType="MemberBoard"
+		resultType="MemberBoard">
+		select e.bd_num, e.bd_title, e.bd_content, e.bd_hashTag,
+		e.bd_location, d.mb_imgSrc,
+		e.bd_regDate, e.bd_category, e.bd_status,
+		d.mb_nickName, d.mb_sex, d.mb_birthDate
+		from board e , member d
+		where
+		bd_category = '2' and bd_status = '1' and e.mb_id = d.mb_id
+		order by
+		bd_num DESC
+	</select>
+
 
 </mapper>

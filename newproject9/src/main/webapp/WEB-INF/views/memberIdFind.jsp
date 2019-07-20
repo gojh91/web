@@ -21,7 +21,11 @@ function chk(){
 		},
 		dataType : 'html',
 		success : function(data) {
-			$('#result').html(data);
+			if (data == ""){
+				alert("해당하는 아이디가 존재하지 않습니다.");
+			}else{
+				$('#result').html("아이디 : " + data);
+			}
 		}
 	});
 }

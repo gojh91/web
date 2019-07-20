@@ -31,7 +31,7 @@ function keypress() {
 				str += '<a href=GOsearch.do?keyword='+this.res_name +'><li>' + this.res_name + '</li></a>';
 			});
 			/* alert("str->" + str); */
-			$('#auto_div').html('<ul>' + str + '</ul>');
+			$('#auto_div').html ('<ul>' + str + '</ul>');
 		}
 	});
 }

@@ -70,5 +70,11 @@ public class MemberDaoImpl implements MemberDao{
 		return session.selectOne("memberPwFind", member);
 	}
 
+	@Override
+	public void changepw(Member member) {
+		// TODO Auto-generated method stub
+		session.update("changePw", member);
+	}
+
 
 }

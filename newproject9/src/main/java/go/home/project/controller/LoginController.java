@@ -193,5 +193,17 @@ public class LoginController {
 		return "memberPwFind";
 	}
 	
+	@RequestMapping(value = "changePwForm")
+	public String changePwForm(Model model, Member member) {
+		System.out.println("@RequestMapping(value = \"changePwForm\")");
+		model.addAttribute("member", member);
+		return "changePwForm";
+	}
 	
+	@RequestMapping(value = "changePw")
+	public String changePw(Model model, Member member) {
+		System.out.println("@RequestMapping(value = \"changePw\")");
+		ms.changepw(member);
+		return "redirect:main.do";
+	}
 }

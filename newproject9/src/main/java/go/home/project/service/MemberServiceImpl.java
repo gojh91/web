@@ -71,4 +71,11 @@ public class MemberServiceImpl implements MemberService{
 		return md.pwFind(member);
 	}
 
+	@Override
+	public void changepw(Member member) {
+		// TODO Auto-generated method stub
+		md.changepw(member);
+		
+	}
+
 }

@@ -21,9 +21,13 @@ function chk(){
 			mb_name : mb_name.value,
 			mb_email : mb_email.value
 		},
-		dataType : 'html',
+		dataType : 'json',
 		success : function(data) {
-			$('#result').html(data);
+			if (data != 1){
+				alert("일치하는 해당 정보가 존재하지 않습니다.");
+			}else{
+				location.href = "changePwForm.do?mb_id=" + mb_id.value;
+			}
 		}
 	});
 }
