@@ -18,27 +18,27 @@ public class MemberBoard {
 	private double bd_score;
 	private int bd_indent;
 	private int bd_step;
-	private int bd_status; //?‚­? œ
+	private int bd_status; 
 	private int bd_replyCnt;
 	private double avg_score;
 	
-	private String mb_id;	// ?•„?´?””
-	private String mb_nickName;	// ?‹‰?„¤?„
-	private String mb_pw;	// ë¹„ë?ë²ˆí˜¸  	
-	private String mb_name;	// ?„±ëª?
-	private String mb_imgSrc;	// ?‚¬ì§? ê²½ë¡œ
-	private String mb_sex;	// ?„±ë³?(1:?‚¨?„± 2:?—¬?„± 9:ë¹„ê³µê°?)
-	private String mb_phone;	// ? „?™”ë²ˆí˜¸
-	private Date mb_birthDate;	// ?ƒ?…„?›”?¼
-	private String mb_email;	// ?´ë©”ì¼
-	private String mb_province;	// (ì£¼ì†Œ) ?„
-	private String mb_city;		// (ì£¼ì†Œ) ?‹œ
-	private String mb_borough;	// (ì£¼ì†Œ) êµ?
-	private String mb_remark;	// ê¸°í?
+	private String mb_id;	
+	private String mb_nickName;	
+	private String mb_pw;	 	
+	private String mb_name;	
+	private String mb_imgSrc;	
+	private String mb_sex;	
+	private String mb_phone;	
+	private Date mb_birthDate;	
+	private String mb_email;	
+	private String mb_province;	
+	private String mb_city;		
+	private String mb_borough;	
+	private String mb_remark;	
 	private String mb_authority;	// ?‘?—…ê¶Œí•œ(1:?¼ë°˜ì‚¬?š©? 2:ê´?ë¦¬ì)
 	private String mb_status;	// STATUS (1:Active 2:Inactive 3:Delete)
-	private Date mb_regDate;	// ê°??…?¼?
-	private Date mb_wdDate;	// ?ƒˆ?‡´?¼?
+	private Date mb_regDate;	
+	private Date mb_wdDate;	
 	public int getBd_num() {
 		return bd_num;
 	}

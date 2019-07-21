@@ -4,10 +4,44 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+<script type="text/javascript">
+	function validCheck() {
+		var flag = false;
+		if (frm.mb_id.value == "") {
+			alert("로그인 후 이용 가능 합니다.");
+		} else {
+			flag = true;
+		}
+		return flag;
+	}
+</script>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 </head>
 <body>
+	<form action="memberBoardSave.do" method="post" name="frm" onsubmit="return validCheck()">
+		<input type="hidden" name="mb_id" required="required" value="${member.mb_id}">
+		
+		<div class="title2">
+			<input class="text" type="text" name="bd_title"
+			required="required" placeholder="제목" maxlength="100" onclick="return validCheck()">
+		</div>
+		<div class="location2">
+			<input class="text" type="text" name="bd_location"
+			required="required" placeholder="위치" maxlength="33" onclick="return validCheck()">
+		</div>
+		<div class="content2">
+			<textarea class="text2" name="bd_content"
+			required="required" placeholder="내용"></textarea>
+		</div>
+		<div class="hashTag2">
+			<input class="text" type="text" name="bd_hashTag"
+			required="required" placeholder="해쉬태그" maxlength="166" onclick="return validCheck()">
+		</div>
+		<div>
+			<input class="submit" type="submit" value="글작성">
+		</div>
+	</form>
 	<c:forEach var="MemberBoard" items="${memberboardlist}">
 		<div class="list">
 					
@@ -40,7 +74,7 @@
 		</div>
 			
 			
-			<h2 class="title"><b><a href="sdDetail.do?bd_num=${MemberBoard.bd_num}">${MemberBoard.bd_title}</a></b></h2>
+			<h2 class="title"><b><a href="boardDetail.do?bd_num=${MemberBoard.bd_num}">${MemberBoard.bd_title}</a></b></h2>
 			<p class="content">${MemberBoard.bd_content}</p>
 			<p class="hashTag">${MemberBoard.bd_hashTag}</p>
 			<p class="location">${MemberBoard.bd_location}</p>

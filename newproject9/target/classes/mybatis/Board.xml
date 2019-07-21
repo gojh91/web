@@ -15,6 +15,19 @@
 		order by
 		bd_num DESC
 	</select>
-
+	
+	<insert id="memberboardsave" parameterType="Board">
+		insert into board(bd_num, mb_id, bd_title, bd_content,
+		bd_hashTag, bd_location, bd_category) 
+		values ((select NVL(max(bd_num),0)+1 from board where bd_category = '2'), #{mb_id}, #{bd_title}, #{bd_content},
+		#{bd_hashTag}, #{bd_location}, '2')
+	</insert>
+	
+	<select id="boardMemberDetail" parameterType="int" resultType="MemberBoard">
+		select d.mb_sex, d.mb_birthDate, d.mb_nickName, d.mb_imgSrc
+		from board e , member d
+		where  e.mb_id = d.mb_id
+		and    bd_num = #{bd_num} and bd_category = '2' and bd_status = '1'
+	</select>
 
 </mapper>

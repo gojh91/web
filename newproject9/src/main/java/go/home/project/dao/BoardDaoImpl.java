@@ -6,6 +6,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import go.home.project.model.Board;
 import go.home.project.model.MemberBoard;
 
 @Repository
@@ -17,6 +18,18 @@ public class BoardDaoImpl implements BoardDao{
 	public List<MemberBoard> memberboardlist(MemberBoard memberboard) {
 		// TODO Auto-generated method stub
 		return session.selectList("memberboardlist", memberboard);
+	}
+
+	@Override
+	public void memberboardsave(Board board) {
+		// TODO Auto-generated method stub
+		session.insert("memberboardsave", board);
+	}
+
+	@Override
+	public MemberBoard boardmemberdetail(int bd_num) {
+		// TODO Auto-generated method stub
+		return session.selectOne("boardMemberDetail", bd_num);
 	}
 
 }
