@@ -24,7 +24,7 @@
 	</insert>
 	
 	<select id="boardMemberDetail" parameterType="int" resultType="MemberBoard">
-		select d.mb_sex, d.mb_birthDate, d.mb_nickName, d.mb_imgSrc
+		select *
 		from board e , member d
 		where  e.mb_id = d.mb_id
 		and    bd_num = #{bd_num} and bd_category = '2' and bd_status = '1'
