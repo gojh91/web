@@ -27,7 +27,14 @@
 		select *
 		from board e , member d
 		where  e.mb_id = d.mb_id
-		and    bd_num = #{bd_num} and bd_category = '2' and bd_status = '1'
+		and    e.bd_num = #{bd_num} and e.bd_category = '2' and e.bd_status = '1'
+	</select>
+	
+	<select id="memberReplyList" parameterType="int" resultType="MemberReply">
+		select r.bd_category, r.bd_num, r.re_seqNum, r.re_content, r.re_regDate, r.re_status, m.mb_nickName, r.mb_id, m.mb_sex, m.mb_birthDate, m.mb_imgSrc
+		from reply r , member m
+		where r.mb_id = m.mb_id and r.bd_num = #{bd_num} and r.bd_category = '2' and r.re_status = '1'
+		order by r.re_seqNum DESC
 	</select>
 
 </mapper>

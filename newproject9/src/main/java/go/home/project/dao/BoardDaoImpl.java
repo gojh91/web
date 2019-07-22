@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import go.home.project.model.Board;
 import go.home.project.model.MemberBoard;
+import go.home.project.model.MemberReply;
 
 @Repository
 public class BoardDaoImpl implements BoardDao{
@@ -30,6 +31,12 @@ public class BoardDaoImpl implements BoardDao{
 	public MemberBoard boardmemberdetail(int bd_num) {
 		// TODO Auto-generated method stub
 		return session.selectOne("boardMemberDetail", bd_num);
+	}
+
+	@Override
+	public List<MemberReply> memberreplylist(int bd_num) {
+		// TODO Auto-generated method stub
+		return session.selectList("memberReplyList", bd_num);
 	}
 
 }

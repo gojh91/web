@@ -1,6 +1,7 @@
 package go.home.project.controller;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
@@ -15,6 +16,31 @@ import go.home.project.service.MemberService;
 public class LoginRestController {
 	@Autowired
 	private MemberService ms;
+	
+	
+//	@RequestMapping(value = "checkLogin")
+//	public String checkLogin(HttpServletRequest request, Model model, Member member) {
+//		System.out.println("@RequestMapping(value = \"checkLogin\")");
+//		
+//		int checklogin = ms.checklogin(member);//아이디 패스워드 확인
+//		String result = "login";
+//
+//		if (checklogin == 1) {
+//			member = ms.memberdetail(member);//로그인 한 사용자 다 가져오기
+//			HttpSession session = request.getSession();
+//			session.setAttribute("loginMember", member);//로그인 한 사용자 세션 넣기
+//			session.setAttribute("checkLogin", checklogin);//로그인 했다는 표시 세션 넣기
+//
+//			int authority = Integer.parseInt(member.getMb_authority());
+//			if (authority == 2) {
+//				result = "forward:memberList.do";
+//			} else {
+//				result = "main";
+//			}
+//		}
+//		return result;
+//	}
+	
 	
 	@RequestMapping("nickNameChk")
 	public int nicknamechk(Model model, HttpServletRequest request, String mb_nickName ) {
@@ -54,5 +80,7 @@ public class LoginRestController {
 		
 		return findpw;
 	}
+	
+	
 
 }

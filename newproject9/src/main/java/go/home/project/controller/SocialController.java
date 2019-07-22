@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import go.home.project.model.Board;
 import go.home.project.model.Member;
 import go.home.project.model.MemberBoard;
+import go.home.project.model.MemberReply;
 import go.home.project.service.BoardService;
 
 @Controller
@@ -44,8 +45,10 @@ public class SocialController {
 		System.out.println("@RequestMapping(value = \"boardDetail\")");
 		HttpSession session = request.getSession();
 		Member member = (Member) session.getAttribute("loginMember");
+		
 		MemberBoard memberboard = new MemberBoard();
 		memberboard = bs.boardmemberdetail(bd_num);
+		
 		if (memberboard.getMb_sex().equals("1")) {
 			memberboard.setMb_sex("남성");
 		}
@@ -56,12 +59,21 @@ public class SocialController {
 			memberboard.setMb_sex("비공개");
 		}
 
+		List<MemberReply> memberreplylist = bs.memberreplylist(bd_num);
+		
 		ArrayList<String> hashTagList = new ArrayList<>(Arrays.asList(memberboard.getBd_hashTag().split("#")));
 		hashTagList.remove(0);
 		model.addAttribute("member", member);
 		model.addAttribute("hashTagList", hashTagList);
 		model.addAttribute("memberboard", memberboard);
+		model.addAttribute("memberreplylist", memberreplylist);
 
 		return "boardDetail";
+	}
+	
+	@RequestMapping(value = "replySave")
+	public String replySave(Model model, HttpServletRequest request) {
+		System.out.println("@RequestMapping(value = \"replySave\")");
+		return null;
 	}
 }

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import go.home.project.dao.BoardDao;
 import go.home.project.model.Board;
 import go.home.project.model.MemberBoard;
+import go.home.project.model.MemberReply;
 
 @Service
 public class BoardServiceImpl implements BoardService{
@@ -31,6 +32,12 @@ public class BoardServiceImpl implements BoardService{
 	public MemberBoard boardmemberdetail(int bd_num) {
 		// TODO Auto-generated method stub
 		return bd.boardmemberdetail(bd_num);
+	}
+
+	@Override
+	public List<MemberReply> memberreplylist(int bd_num) {
+		// TODO Auto-generated method stub
+		return bd.memberreplylist(bd_num);
 	}
 
 }
