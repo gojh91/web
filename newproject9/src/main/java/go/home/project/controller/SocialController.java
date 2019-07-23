@@ -16,6 +16,7 @@ import go.home.project.model.Board;
 import go.home.project.model.Member;
 import go.home.project.model.MemberBoard;
 import go.home.project.model.MemberReply;
+import go.home.project.model.Reply;
 import go.home.project.service.BoardService;
 
 @Controller
@@ -71,9 +72,10 @@ public class SocialController {
 		return "boardDetail";
 	}
 	
-	@RequestMapping(value = "replySave")
-	public String replySave(Model model, HttpServletRequest request) {
+	@RequestMapping(value = "boardReplySave")
+	public String replySave(Model model, HttpServletRequest request, Reply reply) {
 		System.out.println("@RequestMapping(value = \"replySave\")");
+//		bs.boardreplysave(reply);
 		return null;
 	}
 }

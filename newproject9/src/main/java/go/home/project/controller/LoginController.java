@@ -27,29 +27,6 @@ public class LoginController {
 		return "login";
 	}
 
-	@RequestMapping(value = "checkLogin")
-	public String checkLogin(HttpServletRequest request, Model model, Member member) {
-		System.out.println("@RequestMapping(value = \"checkLogin\")");
-		
-		int checklogin = ms.checklogin(member);//아이디 패스워드 확인
-		String result = "login";
-
-		if (checklogin == 1) {
-			member = ms.memberdetail(member);//로그인 한 사용자 다 가져오기
-			HttpSession session = request.getSession();
-			session.setAttribute("loginMember", member);//로그인 한 사용자 세션 넣기
-			session.setAttribute("checkLogin", checklogin);//로그인 했다는 표시 세션 넣기
-
-			int authority = Integer.parseInt(member.getMb_authority());
-			if (authority == 2) {
-				result = "forward:memberList.do";
-			} else {
-				result = "main";
-			}
-		}
-		return result;
-	}
-
 	@RequestMapping(value = "memberList")
 	public String memberList(HttpServletRequest request, Member member, String currentPage, Model model) {
 		System.out.println("@RequestMapping(value = \"memberList\")");

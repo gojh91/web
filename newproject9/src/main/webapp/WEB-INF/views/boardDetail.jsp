@@ -58,7 +58,7 @@
 			<input class="button4" type="button" value="삭제" onclick="return Check()">
 		</c:if>
 	</div>
-	<form action="replySave.do" method="post" name="frm">
+	<form action="boardReplySave.do" method="post" name="frm">
 		<div class="listBack2">
 			<div class="list2">
 				<input type="hidden" name="bd_num"
