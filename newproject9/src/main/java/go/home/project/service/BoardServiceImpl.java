@@ -9,6 +9,7 @@ import go.home.project.dao.BoardDao;
 import go.home.project.model.Board;
 import go.home.project.model.MemberBoard;
 import go.home.project.model.MemberReply;
+import go.home.project.model.Reply;
 
 @Service
 public class BoardServiceImpl implements BoardService{
@@ -38,6 +39,13 @@ public class BoardServiceImpl implements BoardService{
 	public List<MemberReply> memberreplylist(int bd_num) {
 		// TODO Auto-generated method stub
 		return bd.memberreplylist(bd_num);
+	}
+
+	@Override
+	public void boardreplysave(Reply reply) {
+		// TODO Auto-generated method stub
+		bd.boardreplysave(reply);
+		
 	}
 
 }

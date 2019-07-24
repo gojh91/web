@@ -75,7 +75,7 @@ public class SocialController {
 	@RequestMapping(value = "boardReplySave")
 	public String replySave(Model model, HttpServletRequest request, Reply reply) {
 		System.out.println("@RequestMapping(value = \"replySave\")");
-//		bs.boardreplysave(reply);
-		return null;
+		bs.boardreplysave(reply);
+		return "forward:boardDetail.do";
 	}
 }

@@ -36,5 +36,10 @@
 		where r.mb_id = m.mb_id and r.bd_num = #{bd_num} and r.bd_category = '2' and r.re_status = '1'
 		order by r.re_seqNum DESC
 	</select>
+	
+	<insert id="replySave" parameterType="Reply">
+		insert into reply(bd_category, bd_num, re_seqnum, mb_id, re_content, re_status) 
+		values ('2', #{bd_num}, (select NVL(max(re_seqnum),0)+1 from reply where bd_num = #{bd_num} and bd_category = '2'), #{mb_id}, #{re_content}, 1)
+	</insert>
 
 </mapper>
