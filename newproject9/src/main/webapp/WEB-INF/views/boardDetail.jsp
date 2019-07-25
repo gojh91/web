@@ -1,15 +1,24 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
 <script type="text/javascript">
-	function Check(){ 
+	function deleteCheck(){ 
 		var message=confirm("삭제하시겠습니까?");
 		if (message==true){
 			location.href='replyDelete.do?bd_num=${bd_num}&re_seqNum=${Reply.re_seqNum}';
 		}else{
 			alert("삭제 취소 되었습니다.");
+			return false;
+		} 
+	}
+	function updateCheck(){ 
+		var message=confirm("수정하시겠습니까?");
+		if (message==true){
+		}else{
+			alert("수정 취소 되었습니다.");
 			return false;
 		} 
 	} 
@@ -114,9 +123,9 @@
 					<fmt:formatDate value="${parsedRegDate}" pattern="yyyy-MM-dd HH:mm" /></b></p>
 			<c:if test="${Reply.mb_id == member.mb_id}">
 				<input class="button" type="button" value="수정" 
-					onclick="location.href='replyUpdateForm.do?bd_num=${memberboard.bd_num}&re_seqNum=${Reply.re_seqNum}&re_content=${Reply.re_content}'">
+					onclick="location.href='replyUpdate.do?bd_num=${memberboard.bd_num}&re_seqNum=${Reply.re_seqNum}&re_content=${Reply.re_content}'">
 				<input class="submit" type="button" value="삭제" 
-					onclick="return Check()">
+					onclick="return deleteCheck()">
 			</c:if>
 		</div>
 	</c:forEach>

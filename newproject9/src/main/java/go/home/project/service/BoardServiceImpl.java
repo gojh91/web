@@ -48,4 +48,11 @@ public class BoardServiceImpl implements BoardService{
 		
 	}
 
+	@Override
+	public void replyupdate(Reply reply) {
+		// TODO Auto-generated method stub
+		bd.replyupdate(reply);
+		
+	}
+
 }

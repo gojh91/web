@@ -78,4 +78,12 @@ public class SocialController {
 		bs.boardreplysave(reply);
 		return "forward:boardDetail.do";
 	}
+	
+	
+	@RequestMapping(value = "replyUpdate")
+	public String replyUpdate(Model model, HttpServletRequest request, Reply reply) {
+		System.out.println("@RequestMapping(value = \"replyUpdate\")");
+		bs.replyupdate(reply);
+		return "forward:boardDetail.do";
+	}
 }

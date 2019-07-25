@@ -13,4 +13,5 @@ public interface BoardService {
 	MemberBoard boardmemberdetail(int bd_num);
 	List<MemberReply> memberreplylist(int bd_num);
 	void boardreplysave(Reply reply);
+	void replyupdate(Reply reply);
 }
