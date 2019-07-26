@@ -41,5 +41,11 @@
 		insert into reply(bd_category, bd_num, re_seqnum, mb_id, re_content, re_status) 
 		values ('2', #{bd_num}, (select NVL(max(re_seqnum),0)+1 from reply where bd_num = #{bd_num} and bd_category = '2'), #{mb_id}, #{re_content}, 1)
 	</insert>
+	
+	<select id="replyUpdate" parameterType="Reply">
+		update reply
+		set re_content = #{re_content}
+		where bd_num = #{bd_num} and bd_category = '2' and re_seqNum = #{re_seqNum}
+	</select>
 
 </mapper>

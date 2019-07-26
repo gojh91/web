@@ -50,7 +50,7 @@ public class BoardDaoImpl implements BoardDao{
 	@Override
 	public void replyupdate(Reply reply) {
 		// TODO Auto-generated method stub
-		
+		session.selectOne("replyUpdate", reply);
 	}
 
 }
