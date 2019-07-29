@@ -42,10 +42,21 @@
 		values ('2', #{bd_num}, (select NVL(max(re_seqnum),0)+1 from reply where bd_num = #{bd_num} and bd_category = '2'), #{mb_id}, #{re_content}, 1)
 	</insert>
 	
-	<select id="replyUpdate" parameterType="Reply">
+	<select id="boardReplyUpdate" parameterType="Reply">
 		update reply
 		set re_content = #{re_content}
 		where bd_num = #{bd_num} and bd_category = '2' and re_seqNum = #{re_seqNum}
 	</select>
-
+	
+	<select id="boardreplydelete" parameterType="Reply">
+		update reply
+		set re_status = '2'
+		where bd_num = #{bd_num} and bd_category = '2' and re_seqNum = #{re_seqNum}
+	</select>
+	
+	<select id="boardDelete" parameterType="int">
+		update board
+		set bd_status = '2'
+		where bd_num = #{bd_num} and bd_category = '2' and bd_status = '1'
+	</select>
 </mapper>

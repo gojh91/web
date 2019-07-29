@@ -18,7 +18,7 @@ public class Board {
 	private double bd_score;
 	private int bd_indent;
 	private int bd_step;
-	private int bd_status; //?‚­? œ
+	private int bd_status; 
 	private int bd_replyCnt;
 	private double avg_score;
 	

@@ -3,25 +3,60 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
+<script type="text/javascript" src="resources/js/jquery.js"></script>
 <head>
 <script type="text/javascript">
-	function deleteCheck(){ 
+	function replyDeleteCheck(re_seqNum){ 
 		var message=confirm("삭제하시겠습니까?");
 		if (message==true){
-			location.href='replyDelete.do?bd_num=${bd_num}&re_seqNum=${Reply.re_seqNum}';
+			location.href='boardReplyDelete.do?bd_num=${memberboard.bd_num}&re_seqNum='+re_seqNum;
 		}else{
 			alert("삭제 취소 되었습니다.");
-			return false;
 		} 
 	}
-	function updateCheck(){ 
-		var message=confirm("수정하시겠습니까?");
+	function boardDeleteCheck(){
+		var message=confirm("삭제하시겠습니까?");
 		if (message==true){
+			location.href='boardDelete.do?bd_num=${memberboard.bd_num}';
 		}else{
-			alert("수정 취소 되었습니다.");
-			return false;
+			alert("삭제 취소 되었습니다.");
 		} 
-	} 
+	}
+	
+	function updateCheck(re_seqNum, i){ 
+		var message=confirm("수정하시겠습니까?");
+		var bd_num = "${memberboard.bd_num}";
+		var re_content = document.getElementById("re_content"+String(i)).value;
+		if (message==true){
+			$.ajax({
+				url :"${pageContext.request.contextPath}/SocialRest/boardReplyUpdate.do",
+				data : {
+					bd_num : bd_num,
+					re_seqNum : String(re_seqNum),
+					re_content : re_content 
+				},
+				dataType : 'html',
+				success : function(data) {
+					location.href = "boardDetail.do?bd_num=" + bd_num;
+				}
+			}); 
+		}
+	}
+	function updateReplyForm(i){
+		document.getElementById("re_content"+String(i)).disabled = false;
+		document.getElementById("updateReplyBtn"+String(i)).style.display = "None";
+		document.getElementById("deleteReplyBtn"+String(i)).style.display = "None";
+		document.getElementById("yesBtn"+String(i)).type = "button";
+		document.getElementById("cancelBtn"+String(i)).type = "button";
+	}
+	function cancel(i){
+		document.getElementById("re_content"+String(i)).disabled = true;
+		document.getElementById("updateReplyBtn"+String(i)).style.display = "";
+		document.getElementById("deleteReplyBtn"+String(i)).style.display = "";
+		document.getElementById("yesBtn"+String(i)).type = "hidden";
+		document.getElementById("cancelBtn"+String(i)).type = "hidden";
+	}
+	
 </script>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
@@ -64,7 +99,7 @@
 		<input class="button1" type="button" value="메인" onclick="location.href='memberBoardList.do'">
 		<c:if test="${memberboard.mb_id == member.mb_id}">
 			<input class="button3" type="button" value="수정" onclick="location.href='sdUpdateForm.do?bd_num=${memberboard.bd_num}'">
-			<input class="button4" type="button" value="삭제" onclick="return Check()">
+			<input class="button4" type="button" value="삭제" onclick="return boardDeleteCheck()">
 		</c:if>
 	</div>
 	<form action="boardReplySave.do" method="post" name="frm">
@@ -85,7 +120,7 @@
 			</div>
 		</div>
 	</form>
-	<c:forEach var="Reply" items="${memberreplylist}">
+	<c:forEach var="Reply" items="${memberreplylist}" varStatus="i">
 		<div class="list">
 		
 			<img class="image" src="${pageContext.request.contextPath}/upload/${Reply.mb_imgSrc}"
@@ -117,15 +152,19 @@
 			</table>
  			</div>
 		</div>
-			<textarea class="content" disabled="disabled" >${Reply.re_content}</textarea>
-			
+				
+			<textarea id="re_content${i.index}" class="content" disabled="disabled" >${Reply.re_content}</textarea>
 			<p class="regDate"><b><fmt:parseDate var="parsedRegDate" pattern="yyyy-MM-dd HH:mm:SS.s" value="${Reply.re_regDate}"/>
 					<fmt:formatDate value="${parsedRegDate}" pattern="yyyy-MM-dd HH:mm" /></b></p>
 			<c:if test="${Reply.mb_id == member.mb_id}">
-				<input class="button" type="button" value="수정" 
-					onclick="location.href='replyUpdate.do?bd_num=${memberboard.bd_num}&re_seqNum=${Reply.re_seqNum}&re_content=${Reply.re_content}'">
-				<input class="submit" type="button" value="삭제" 
-					onclick="return deleteCheck()">
+				<input id="updateReplyBtn${i.index}" class="button" type="button" value="수정" 
+					onclick="return updateReplyForm(${i.index})">
+				<input id="deleteReplyBtn${i.index}" class="submit" type="button" value="삭제" 
+					onclick="return replyDeleteCheck(${Reply.re_seqNum})">
+				<input id="yesBtn${i.index}" class="button" type="hidden" value="확인" 
+					onclick="return updateCheck(${Reply.re_seqNum}, ${i.index} )">
+				<input id="cancelBtn${i.index}" class="submit" type="hidden" value="취소" 
+					onclick="return cancel(${i.index})">
 			</c:if>
 		</div>
 	</c:forEach>

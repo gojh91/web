@@ -12,7 +12,7 @@ import go.home.project.model.MemberReply;
 import go.home.project.model.Reply;
 
 @Repository
-public class BoardDaoImpl implements BoardDao{
+public class SocialDaoImpl implements SocialDao{
 	@Autowired
 	private SqlSession session;
 
@@ -48,9 +48,21 @@ public class BoardDaoImpl implements BoardDao{
 	}
 
 	@Override
-	public void replyupdate(Reply reply) {
+	public void boardReplyUpdate(Reply reply) {
 		// TODO Auto-generated method stub
-		session.selectOne("replyUpdate", reply);
+		session.selectOne("boardReplyUpdate", reply);
+	}
+
+	@Override
+	public void boardreplydelete(Reply reply) {
+		// TODO Auto-generated method stub
+		session.selectOne("boardreplydelete", reply);
+	}
+
+	@Override
+	public void boardDelete(int bd_num) {
+		// TODO Auto-generated method stub
+		session.selectOne("boardDelete",bd_num);
 	}
 
 }

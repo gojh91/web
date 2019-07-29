@@ -9,4 +9,6 @@
     <fullyQualifiedTypeName name="go.home.project.model.MemberBoard"/>
     <fullyQualifiedTypeName name="java.util.ArrayList"/>
     <fullyQualifiedTypeName name="go.home.project.model.Member"/>
+    <fullyQualifiedTypeName name="java.lang.String"/>
+    <fullyQualifiedTypeName name="go.home.project.model.Reply"/>
 </qualifiedTypeNameHistroy>

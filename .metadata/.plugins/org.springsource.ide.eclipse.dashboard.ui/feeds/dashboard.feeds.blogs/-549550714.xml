@@ -5,16 +5,16 @@
   <link rel="self" href="https://spring.io/blog.atom" />
   <id>http://spring.io/blog.atom</id>
   <icon>https://spring.io/favicon.ico</icon>
-  <updated>2019-07-26T07:05:58Z</updated>
+  <updated>2019-07-26T07:05:00Z</updated>
   <entry>
-    <title>Spring team legend Oliver Drotbohm</title>
-    <link rel="alternate" href="https://spring.io/blog/2019/07/26/spring-team-legend-oliver-drotbohm" />
+    <title>A Bootiful Podcast: Spring team legend Oliver Drotbohm</title>
+    <link rel="alternate" href="https://spring.io/blog/2019/07/26/a-bootiful-podcast-spring-team-legend-oliver-drotbohm" />
     <category term="engineering" label="Engineering" />
     <author>
       <name>Josh Long</name>
     </author>
     <id>tag:spring.io,2019-07-26:3751</id>
-    <updated>2019-07-26T07:05:58Z</updated>
+    <updated>2019-07-26T07:05:00Z</updated>
     <content type="html">&lt;p&gt;Hi, Spring fans! In this installment, &lt;a href="http://twitter.com/Starbuxman"&gt;Josh Long (@starbuxman)&lt;/a&gt; talks to former Spring Data lead, creator of Spring HATEOAS, vocal hypermedia advocate and musician &lt;a href="http://twitter.com/odrotbohm"&gt;Oliver Drotbohm (@odrotbohm)&lt;/a&gt; on Spring Data, HATEOAS, Hypermedia, and more.&lt;/p&gt;
 &lt;ul&gt;
   &lt;li&gt;&lt;a href="http://twitter.com/odrotbohm"&gt;Oliver on Twitter (@odrotbohm)&lt;/a&gt;&lt;/li&gt;

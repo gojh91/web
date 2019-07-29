@@ -17,38 +17,39 @@ import go.home.project.model.Member;
 import go.home.project.model.MemberBoard;
 import go.home.project.model.MemberReply;
 import go.home.project.model.Reply;
-import go.home.project.service.BoardService;
+import go.home.project.service.SocialService;
 
 @Controller
 public class SocialController {
 	@Autowired
-	private BoardService bs;
+	private SocialService ss;
 
-	@RequestMapping(value = "memberBoardSave")
+	@RequestMapping(value = "memberBoardSave") //social 저장
 	public String memberBoardSave(Board board, Model model, HttpServletRequest request) {
-		bs.memberboardsave(board);
+		System.out.println("@RequestMapping(value = \"memberBoardSave\")");
+		ss.memberboardsave(board);
 		return "forward:memberBoardList.do";
 	}
 
-	@RequestMapping(value = "memberBoardList")
+	@RequestMapping(value = "memberBoardList") //social 리스트
 	public String memberBoardList(MemberBoard memberboard, Model model, HttpServletRequest request) {
 		System.out.println("@RequestMapping(value = \"memberBoardList\")");
 		HttpSession session = request.getSession();
 		Member member = (Member) session.getAttribute("loginMember");
-		List<MemberBoard> memberboardlist = bs.memberboardlist(memberboard);
+		List<MemberBoard> memberboardlist = ss.memberboardlist(memberboard);
 		model.addAttribute("member", member);
 		model.addAttribute("memberboardlist", memberboardlist);
 		return "memberBoardList";
 	}
 
-	@RequestMapping(value = "boardDetail")
+	@RequestMapping(value = "boardDetail") //social detail
 	public String boardDetail(int bd_num, Model model, HttpServletRequest request) {
 		System.out.println("@RequestMapping(value = \"boardDetail\")");
 		HttpSession session = request.getSession();
 		Member member = (Member) session.getAttribute("loginMember");
 		
 		MemberBoard memberboard = new MemberBoard();
-		memberboard = bs.boardmemberdetail(bd_num);
+		memberboard = ss.boardmemberdetail(bd_num);
 		
 		if (memberboard.getMb_sex().equals("1")) {
 			memberboard.setMb_sex("남성");
@@ -60,7 +61,7 @@ public class SocialController {
 			memberboard.setMb_sex("비공개");
 		}
 
-		List<MemberReply> memberreplylist = bs.memberreplylist(bd_num);
+		List<MemberReply> memberreplylist = ss.memberreplylist(bd_num);
 		
 		ArrayList<String> hashTagList = new ArrayList<>(Arrays.asList(memberboard.getBd_hashTag().split("#")));
 		hashTagList.remove(0);
@@ -72,18 +73,26 @@ public class SocialController {
 		return "boardDetail";
 	}
 	
-	@RequestMapping(value = "boardReplySave")
+	@RequestMapping(value="boardDelete")	// social 삭제
+	public String boardDelete(int bd_num, HttpServletRequest request,Model model) {
+		System.out.println("@RequestMapping(value = \"boardDelete\")");
+		ss.boardDelete(bd_num);
+		return "forward:memberBoardList.do";
+	}
+	
+	
+	@RequestMapping(value = "boardReplySave") //social 댓글 추가
 	public String replySave(Model model, HttpServletRequest request, Reply reply) {
-		System.out.println("@RequestMapping(value = \"replySave\")");
-		bs.boardreplysave(reply);
+		System.out.println("@RequestMapping(value = \"boardReplySave\")");
+		ss.boardreplysave(reply);
 		return "forward:boardDetail.do";
 	}
 	
-	
-	@RequestMapping(value = "replyUpdate")
-	public String replyUpdate(Model model, HttpServletRequest request, Reply reply) {
-		System.out.println("@RequestMapping(value = \"replyUpdate\")");
-		bs.replyupdate(reply);
+	@RequestMapping(value="boardReplyDelete")	// social 댓글 삭제
+	public String boardReplyDelete(Reply reply, HttpServletRequest request, Model model) {
+		System.out.println("@RequestMapping(value = \"boardReplyDelete\")");
+		ss.boardreplydelete(reply);
 		return "forward:boardDetail.do";
 	}
+
 }
