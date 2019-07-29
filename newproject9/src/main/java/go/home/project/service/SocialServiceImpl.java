@@ -67,6 +67,18 @@ public class SocialServiceImpl implements SocialService{
 		sd.boardDelete(bd_num);
 	}
 
+	@Override
+	public Board board(int bd_num) {
+		// TODO Auto-generated method stub
+		return sd.board(bd_num);
+	}
+
+	@Override
+	public void boardUpdate(Board board) {
+		// TODO Auto-generated method stub
+		sd.boardUpdate(board);
+	}
+
 	
 
 }

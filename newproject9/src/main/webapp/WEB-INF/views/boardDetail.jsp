@@ -6,14 +6,32 @@
 <script type="text/javascript" src="resources/js/jquery.js"></script>
 <head>
 <script type="text/javascript">
-	function replyDeleteCheck(re_seqNum){ 
-		var message=confirm("삭제하시겠습니까?");
+
+	function updateBoardCheck(){ 
+		var message=confirm("수정하시겠습니까?");
 		if (message==true){
-			location.href='boardReplyDelete.do?bd_num=${memberboard.bd_num}&re_seqNum='+re_seqNum;
+			location.href='boardUpdateForm.do?bd_num=${memberboard.bd_num}';
 		}else{
 			alert("삭제 취소 되었습니다.");
-		} 
+		}
 	}
+	
+	function updateBoardForm(){
+		document.getElementById("bd_content").disabled = false;
+		document.getElementById("updateBoardBtn").style.display = "None";
+		document.getElementById("deleteBoardBtn").style.display = "None";
+		document.getElementById("yes1Btn").type = "button";
+		document.getElementById("cancel1Btn").type = "button";
+	}
+	
+	function updateBoardCancel(){
+		document.getElementById("bd_content").disabled = true;
+		document.getElementById("updateBoardBtn").style.display = "";
+		document.getElementById("deleteBoardBtn").style.display = "";
+		document.getElementById("yes1Btn").type = "hidden";
+		document.getElementById("cancel1Btn").type = "hidden";
+	}
+
 	function boardDeleteCheck(){
 		var message=confirm("삭제하시겠습니까?");
 		if (message==true){
@@ -22,8 +40,16 @@
 			alert("삭제 취소 되었습니다.");
 		} 
 	}
+	function replyDeleteCheck(re_seqNum){ 
+		var message=confirm("삭제하시겠습니까?");
+		if (message==true){
+			location.href='boardReplyDelete.do?bd_num=${memberboard.bd_num}&re_seqNum='+re_seqNum;
+		}else{
+			alert("삭제 취소 되었습니다.");
+		} 
+	}
 	
-	function updateCheck(re_seqNum, i){ 
+	function updateReplyCheck(re_seqNum, i){ 
 		var message=confirm("수정하시겠습니까?");
 		var bd_num = "${memberboard.bd_num}";
 		var re_content = document.getElementById("re_content"+String(i)).value;
@@ -49,12 +75,21 @@
 		document.getElementById("yesBtn"+String(i)).type = "button";
 		document.getElementById("cancelBtn"+String(i)).type = "button";
 	}
-	function cancel(i){
+	function updateReplyCancel(i){
 		document.getElementById("re_content"+String(i)).disabled = true;
 		document.getElementById("updateReplyBtn"+String(i)).style.display = "";
 		document.getElementById("deleteReplyBtn"+String(i)).style.display = "";
 		document.getElementById("yesBtn"+String(i)).type = "hidden";
 		document.getElementById("cancelBtn"+String(i)).type = "hidden";
+	}
+	
+	function validCheck(i){
+		if (i == null){
+			alert("로그인 후 이용 가능합니다.");
+			return false;
+		}else{
+			return true;
+		}
 	}
 	
 </script>
@@ -85,8 +120,8 @@
 		
 		<h2 class="title">${memberboard.bd_title}</h2>
 		
-		<textarea class="content" name="bd_content" disabled="disabled" >${memberboard.bd_content}</textarea>
-				
+		<textarea id="bd_content" class="content" name="bd_content" disabled="disabled" >${memberboard.bd_content}</textarea>
+		<br>
 		<dlv class="hashTag">
 		<c:forEach var="hashTag" items="${hashTagList}">
 			<spen><a href=search.do?login=false&nick=NULL&keyword=${hashTag}>#${hashTag}</a></spen>
@@ -98,11 +133,12 @@
 					<fmt:formatDate value="${parsedRegDate}" pattern="yyyy-MM-dd HH:mm" /></b></p>
 		<input class="button1" type="button" value="메인" onclick="location.href='memberBoardList.do'">
 		<c:if test="${memberboard.mb_id == member.mb_id}">
-			<input class="button3" type="button" value="수정" onclick="location.href='sdUpdateForm.do?bd_num=${memberboard.bd_num}'">
+			<input class="button3" type="button" value="수정" onclick="return updateBoardCheck()">
 			<input class="button4" type="button" value="삭제" onclick="return boardDeleteCheck()">
+			
 		</c:if>
 	</div>
-	<form action="boardReplySave.do" method="post" name="frm">
+	<form action="boardReplySave.do" method="post" name="frm" onsubmit="return validCheck(${member.mb_id})">
 		<div class="listBack2">
 			<div class="list2">
 				<input type="hidden" name="bd_num"
@@ -162,9 +198,9 @@
 				<input id="deleteReplyBtn${i.index}" class="submit" type="button" value="삭제" 
 					onclick="return replyDeleteCheck(${Reply.re_seqNum})">
 				<input id="yesBtn${i.index}" class="button" type="hidden" value="확인" 
-					onclick="return updateCheck(${Reply.re_seqNum}, ${i.index} )">
+					onclick="return updateReplyCheck(${Reply.re_seqNum}, ${i.index} )">
 				<input id="cancelBtn${i.index}" class="submit" type="hidden" value="취소" 
-					onclick="return cancel(${i.index})">
+					onclick="return updateReplyCancel(${i.index})">
 			</c:if>
 		</div>
 	</c:forEach>

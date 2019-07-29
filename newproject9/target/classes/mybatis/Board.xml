@@ -59,4 +59,16 @@
 		set bd_status = '2'
 		where bd_num = #{bd_num} and bd_category = '2' and bd_status = '1'
 	</select>
+	
+	<select id="board" parameterType="int" resultType="Board">
+		select * from board where bd_num = #{bd_num} and bd_category = '2' and bd_status = '1'
+	</select>
+	
+	<select id="boardUpdate" parameterType="Board">
+		update board
+		set bd_title = #{bd_title}, bd_content = #{bd_content},
+		bd_hashTag = #{bd_hashTag}, bd_location = #{bd_location}
+		where bd_num = #{bd_num} and bd_category = '2'
+	</select>
+	
 </mapper>

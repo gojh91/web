@@ -94,5 +94,19 @@ public class SocialController {
 		ss.boardreplydelete(reply);
 		return "forward:boardDetail.do";
 	}
-
+	
+	@RequestMapping(value="boardUpdateForm")	// social 수정폼
+	public String boardUpdateForm(int bd_num, HttpServletRequest request, Model model) {
+		System.out.println("@RequestMapping(value = \"boardUpdateForm\")");
+		Board board = ss.board(bd_num); //board 다 가져오기
+		model.addAttribute("board", board);
+		return "boardUpdateForm";
+	}
+	
+	@RequestMapping(value="boardUpdate")	// social 수정
+	public String boardUpdate(Board board, HttpServletRequest request, Model model) {
+		System.out.println("@RequestMapping(value = \"boardUpdate\")");
+		ss.boardUpdate(board);		
+		return "forward:boardDetail.do";
+	}
 }

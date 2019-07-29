@@ -65,4 +65,18 @@ public class SocialDaoImpl implements SocialDao{
 		session.selectOne("boardDelete",bd_num);
 	}
 
+	@Override
+	public Board board(int bd_num) {
+		// TODO Auto-generated method stub
+		return session.selectOne("board", bd_num);
+	}
+
+	@Override
+	public void boardUpdate(Board board) {
+		// TODO Auto-generated method stub
+		session.selectOne("boardUpdate",board);
+	}
+	
+	
+
 }

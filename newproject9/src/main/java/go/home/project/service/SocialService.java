@@ -16,4 +16,6 @@ public interface SocialService {
 	void boardReplyUpdate(Reply reply);
 	void boardreplydelete(Reply reply);
 	void boardDelete(int bd_num);
+	Board board(int bd_num);
+	void boardUpdate(Board board);
 }

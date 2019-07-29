@@ -16,7 +16,6 @@ public class SocialRestController {
 	@Autowired
 	private SocialService ss;
 	
-	
 	@RequestMapping(value = "boardReplyUpdate") //social ´ñ±Û ¼öÁ¤
 	public void boardReplyUpdate(HttpServletRequest request, Model model, String bd_num, String re_seqNum, String re_content) {
 		System.out.println("@RequestMapping(value = \"boardReplyUpdate\")");
@@ -26,10 +25,6 @@ public class SocialRestController {
 		reply.setRe_content(re_content);
 		
 		ss.boardReplyUpdate(reply);
-		
 	}
-
-	
-	
 
 }
