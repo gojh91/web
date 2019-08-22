@@ -19,8 +19,9 @@ public class ReviewController {
 	
 	@RequestMapping(value="reviewList")
 	public String reviewList(Model model, HttpServletRequest request) {
+		System.out.println("@RequestMapping(value = \"reviewList\")");
 		List<MemberBoard> reviewList = rs.reviewList();
-		
+		model.addAttribute("reviewList",reviewList);
 		
 		return "reviewList";
 	}
