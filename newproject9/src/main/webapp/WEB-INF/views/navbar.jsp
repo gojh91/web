@@ -16,7 +16,7 @@
 		<button type="submit">검색</button>
 	</form>
 	<a href="memberBoardList.do">소셜네트워크</a>
-	<a>리뷰피드</a>
+	<a href="reviewList.do">리뷰피드</a>
 	<c:if test="${checkLogin == 1}">
 		${loginMember.mb_nickName}
 		<a onclick="location.href='memberLogout.do'">로그아웃</a>

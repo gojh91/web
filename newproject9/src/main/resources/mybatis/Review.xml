@@ -3,5 +3,13 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="Review">
+	<select id = "reviewList" resultType="MemberBoard">
+      select e.bd_num, e.bd_title, e.bd_content, e.bd_visitCnt, e.bd_likeCnt, e.bd_hashTag, e.bd_location,
+      		 e.bd_regDate, e.bd_category, e.res_num, e.bd_score, e.bd_status, e.bd_imgSrc,
+      		 d.mb_imgSrc, d.mb_nickName, d.mb_birthDate, d.mb_id 
+      from board e , member d
+      where bd_category = '1' and bd_status = '1' and e.mb_id = d.mb_id
+      order by bd_num DESC
+   </select>
 
 </mapper>
