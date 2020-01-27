@@ -1,0 +1,4 @@
+#NOTE: This is an Aether internal implementation file, its format can be changed without prior notice.
+#Tue Jul 10 17:29:44 KST 2018
+@default-central-https\://repo.maven.apache.org/maven2/.lastUpdated=1531211384993
+https\://repo.maven.apache.org/maven2/.error=Could not transfer artifact org.hibernate\:hibernate-validator\:pom\:4.2.0.Final from/to central (https\://repo.maven.apache.org/maven2)\: repo.maven.apache.org
